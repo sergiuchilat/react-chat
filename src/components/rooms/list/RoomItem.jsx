@@ -1,6 +1,7 @@
-export default function RoomItem({name}){
+export default function RoomItem({id, name, onSelect}){
+
     return (
-        <div>
+        <div onClick={() => {onSelect(id)}}>
             <div>{name}</div>
         </div>
     )
