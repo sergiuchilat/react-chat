@@ -2,8 +2,6 @@
 export default function RoomSearch({onSearch}){
 
     const handleSearch = (e) => {
-        console.log(e.target.value)
-        console.log('ooo')
         onSearch(e.target.value)
     }
 
