@@ -6,9 +6,13 @@ export default class RoomsApi extends ApiModel{
         this.resourceUrl = 'rooms';
     }
 
-    async get() {
+    async get(searchString = '') {
         return await new Promise((resolve) => {
-            resolve(rooms);
+            const response = rooms.filter(
+                    room => searchString === '' ||
+                        (room.name.toLowerCase().search(searchString.toLowerCase()) !== -1)
+            )
+            resolve(response);
         });
     }
 

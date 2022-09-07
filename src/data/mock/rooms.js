@@ -14,5 +14,9 @@ export default [
     {
         id: 4,
         name: "Private Chat"
+    },
+    {
+        id: 5,
+        name: "Victorita"
     }
 ]
