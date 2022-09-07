@@ -1,32 +1,35 @@
-import MessageItem from "./MessageItem";
-import {useEffect, useState} from "react";
-import MessagesApi from "../../../../services/api/modules/MessagesApi";
+import MessageItem from './MessageItem';
+import { useEffect, useState } from 'react';
+import MessagesApi from '../../../../services/api/modules/MessagesApi';
 
-export default function MessagesList({roomId}){
+export default function MessagesList({ roomId }){
 
-    const [messages, setMessages] = useState([]);
+  const [messages, setMessages] = useState([]);
 
-    const fetchRoomMessages = async () => {
-        try {
-            const response = await (new MessagesApi()).getRoomMessages(roomId);
-            setMessages(response);
-        } catch (e){
-            console.log(e)
-        }
+  const fetchRoomMessages = async () => {
+    try {
+      const response = await (new MessagesApi()).getRoomMessages(roomId);
+      setMessages(response);
+    } catch (e){
+      console.log(e);
     }
+  };
 
-    useEffect(() => {
-        fetchRoomMessages();
-    }, [roomId]);
+  useEffect(() => {
+    fetchRoomMessages();
+  }, [roomId]);
 
 
-    return (
-        <div>
-            {
-                messages && messages.map(message => (
-                    <MessageItem message={message.text} key={message.id}/>
-                ))
-            }
-        </div>
-    )
+  return (
+    <div>
+      {
+        messages && messages.map(message => (
+          <MessageItem
+            message={message.text}
+            key={message.id}
+          />
+        ))
+      }
+    </div>
+  );
 }

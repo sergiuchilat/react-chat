@@ -1,13 +1,16 @@
 
-export default function RoomSearch({onSearch}){
+export default function RoomSearch({ onSearch }){
 
-    const handleSearch = (e) => {
-        onSearch(e.target.value)
-    }
+  const handleSearch = (e) => {
+    onSearch(e.target.value);
+  };
 
-    return (
-        <div className={'rooms-search'}>
-            <input type="text" onInput={handleSearch}/>
-        </div>
-    )
+  return (
+    <div className={'rooms-search'}>
+      <input
+        type={'text'}
+        onInput={handleSearch}
+      />
+    </div>
+  );
 }

@@ -1,7 +1,7 @@
-export default function MessageItem({message}){
-    return (
-        <div>
-            {message}
-        </div>
-    )
+export default function MessageItem({ message }){
+  return (
+    <div>
+      {message}
+    </div>
+  );
 }
