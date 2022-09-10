@@ -1,4 +1,4 @@
-import './App.css';
+import './assets/styles/App.css';
 import ChatWrapper from './components/ChatWrapper';
 
 function App() {

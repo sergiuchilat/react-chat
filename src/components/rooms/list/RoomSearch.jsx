@@ -8,6 +8,8 @@ export default function RoomSearch({ onSearch }){
   return (
     <div className={'rooms-search'}>
       <input
+        className={'rooms-search-input'}
+        placeholder={'Search room'}
         type={'text'}
         onInput={handleSearch}
       />
