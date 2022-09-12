@@ -13,7 +13,7 @@ export default function RoomItem({ id }){
   });
   const [messages, setMessages] = useState([]);
   const [message, setMessage] = useState('');
-
+  const [searchMessage, setSearchMessage] = useState(false);
   const fetchRoomItem = async () => {
     try {
       if(id){
@@ -26,13 +26,15 @@ export default function RoomItem({ id }){
   };
 
   const handleSubmitMessage = () => {
-    messages.push({
-      id: Date.now(),
-      text: message,
-      room_id: id,
-      sender_id: 1,
-      receiver_id: 2,
-    });
+    if(message.trim().length) {
+      messages.push({
+        id: Date.now(),
+        text: message,
+        room_id: id,
+        sender_id: 1,
+        receiver_id: 2,
+      });
+    }
     setMessage('');
   };
 
@@ -49,16 +51,27 @@ export default function RoomItem({ id }){
     }
   };
 
+  const handlerSearchMode = () => {
+    setSearchMessage(searchMessage => !searchMessage);
+  };
+
   useEffect(() => {
     fetchRoomItem();
     fetchRoomMessages();
   }, [id]);
 
   return (
-    <div className={'rooms-item'}>
+    <div className={`${room.name && 'rooms-item'}`}>
       {room.name && <>
-        <RoomName name={room.name} />
-        <MessageSearch />
+        {!searchMessage &&
+            <RoomName
+              name={room.name}
+              handlerSearch={ handlerSearchMode }
+            />}
+        {searchMessage &&
+            <MessageSearch
+              handlerSearch={ handlerSearchMode }
+            />}
         <MessagesList
           roomId={id}
           messages={messages}

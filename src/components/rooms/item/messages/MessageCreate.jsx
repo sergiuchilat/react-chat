@@ -3,6 +3,7 @@ import smile from '../../../../assets/img/icons/smile.png';
 import attachment from '../../../../assets/img/icons/attachment.png';
 
 export default function MessageCreate({ message, handleChangeMessage, handleSubmitMessage }) {
+
   return (
     <div className={'message-create'}>
       <button className={'send-message'}>
@@ -14,9 +15,10 @@ export default function MessageCreate({ message, handleChangeMessage, handleSubm
         />
       </button>
       <input
-        placeholder={'Write a message'}
+        placeholder={'Write a message...'}
         value={message}
         onChange={(e) => handleChangeMessage(e.target.value)}
+        onKeyDown={(e) => e.key === 'Enter' && handleSubmitMessage(e.target.value)}
         className={'rooms-search-input rooms-message-input'}
         type={'text'}
       />
@@ -31,7 +33,7 @@ export default function MessageCreate({ message, handleChangeMessage, handleSubm
         />
       </button>
       <button
-        onClick={handleSubmitMessage}
+        onClick={(e) => handleSubmitMessage(e.target.value)}
         className={'send-message'}
       >
         <img

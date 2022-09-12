@@ -1,10 +1,10 @@
 import avatar from './../../../assets/img/icons/avatar.png';
 
-export default function RoomItem({ id, name, onSelect }){
+export default function RoomItem({ id, name, onSelect, activeRoom }){
 
   return (
     <div
-      className={'room-list-item'}
+      className={`room-list-item ${activeRoom === id && 'room-list-item--active'}`}
       onClick={() => {onSelect(id);}}
     >
       <img

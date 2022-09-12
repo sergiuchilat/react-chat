@@ -6,7 +6,7 @@ import RoomsApi from 'services/api/modules/RoomsApi';
 export default function RoomsList({ onSelect }){
   const [rooms, setRooms] = useState([]);
   const [searchString, setSearchString] = useState('');
-
+  const [activeRoom, setActiveRoom] = useState(null);
   const fetchRoomsList = async () => {
     try {
       const response = await (new RoomsApi()).get(searchString);
@@ -22,24 +22,25 @@ export default function RoomsList({ onSelect }){
 
   const onRoomSelectHandle = (roomId) => {
     onSelect(roomId);
+    setActiveRoom(roomId);
   };
 
   const onRoomSearch = (searchString) => {
-    console.log(searchString);
     setSearchString(searchString);
   };
 
   return (
-    <div>
+    <div className={'rooms-list-inner'}>
       <RoomSearch onSearch={onRoomSearch} />
       <div className={'rooms-list'}>
         {
-          rooms && rooms.map(room => (
+          rooms.length !== 0 && rooms.map(room => (
             <RoomItem
               name={room.name}
               id={room.id}
               key={room.id}
               onSelect={onRoomSelectHandle}
+              activeRoom={activeRoom}
             />
           ))
         }
