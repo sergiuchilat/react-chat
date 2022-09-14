@@ -21,4 +21,14 @@ export default class RoomsApi extends ApiModel{
       resolve(rooms.find(room => room.id === id));
     });
   }
+
+  async getRoomsList() {
+    return await this.http.get(`${this.resourceUrl}/`);
+  }
+  async createRoom(payload) {
+    return await this.http.post(`${this.resourceUrl}/`, payload);
+  }
+  async addMember(roomId, payload) {
+    return await this.http.post(`${this.resourceUrl}/${roomId}/members/`, payload);
+  }
 }

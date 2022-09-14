@@ -24,7 +24,6 @@ export default class ApiModel{
         if ( !isAbsoluteURLRegex.test(config.url) ) {
           queryConfig.url = `${process.env.REACT_APP_API_URL}${queryConfig.url}`;
         }
-
         return queryConfig;
       }
     );

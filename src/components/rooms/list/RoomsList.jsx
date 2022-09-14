@@ -16,8 +16,41 @@ export default function RoomsList({ onSelect }){
     }
   };
 
+  const fetchRoomsL = async () => {
+    try {
+      const response = await (new RoomsApi()).getRoomsList();
+      console.log(response);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const addMember = async () => {
+    try {
+      const response = await (new RoomsApi()).addMember('ffefaa84-d59e-44a5-b019-54ba85811534',{
+        external_user_uuid: '469|EuJScKNah0QvVzJnFnDxl5shTN6f9ZvkiMGfUtWU',
+      });
+      console.log(response);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const createRoom = async () => {
+    try {
+      await (new RoomsApi()).createRoom({
+        name: 'Vicu',
+        avatar_link: 'asd',
+      });
+      await fetchRoomsL();
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   useEffect(() => {
     fetchRoomsList();
+    fetchRoomsL();
   }, [searchString]);
 
   const onRoomSelectHandle = (roomId) => {
@@ -45,6 +78,7 @@ export default function RoomsList({ onSelect }){
           ))
         }
       </div>
+      <button onClick={() => addMember()}>+</button>
     </div>
   );
 }
