@@ -2,7 +2,7 @@ import RoomName from './RoomName';
 import MessageSearch from './messages/MessageSearch';
 import MessagesList from './messages/MessagesList';
 import MessageCreate from './messages/MessageCreate';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import RoomsApi from '../../../services/api/modules/RoomsApi';
 import MessagesApi from '../../../services/api/modules/MessagesApi';
 
@@ -12,8 +12,9 @@ export default function RoomItem({ id }){
     name: ''
   });
   const [messages, setMessages] = useState([]);
+  const [messageSearch, setMessageSearch] = useState('');
   const [message, setMessage] = useState('');
-  const [searchMessage, setSearchMessage] = useState(false);
+  const [searchMessageMode, setSearchMessageMode] = useState(false);
   const fetchRoomItem = async () => {
     try {
       if(id){
@@ -44,15 +45,30 @@ export default function RoomItem({ id }){
 
   const fetchRoomMessages = async () => {
     try {
-      const response = await (new MessagesApi()).getRoomMessages(id);
+      const response = await (new MessagesApi()).getRoomMessages(id, messageSearch);
       setMessages(response);
     } catch (e){
       console.log(e);
     }
   };
 
-  const handlerSearchMode = () => {
-    setSearchMessage(searchMessage => !searchMessage);
+  const clearSearchMessage = useCallback(() => {
+    setMessageSearch('');
+  }, []);
+
+  const handlerSearchMode = async () => {
+    clearSearchMessage();
+    console.log(messageSearch);
+    setSearchMessageMode(searchMessageMode => !searchMessageMode);
+  };
+  const handleChangeSearch = (value) => {
+    setMessageSearch(value);
+  };
+  const handleSetEmoji = (emoji) => {
+    setMessage(message + emoji);
+  };
+  const handleSearch = () => {
+    fetchRoomMessages();
   };
 
   useEffect(() => {
@@ -61,16 +77,18 @@ export default function RoomItem({ id }){
   }, [id]);
 
   return (
-    <div className={`${room.name && 'rooms-item'}`}>
+    <div className={`${room.name && 'rooms-item'} room`}>
       {room.name && <>
-        {!searchMessage &&
+        {!searchMessageMode &&
             <RoomName
               name={room.name}
               handlerSearch={ handlerSearchMode }
             />}
-        {searchMessage &&
+        {searchMessageMode &&
             <MessageSearch
-              handlerSearch={ handlerSearchMode }
+              handleCloseSearch={ handlerSearchMode }
+              handleChangeSearch={ handleChangeSearch }
+              handleSearch={ handleSearch }
             />}
         <MessagesList
           roomId={id}
@@ -80,6 +98,7 @@ export default function RoomItem({ id }){
           message={message}
           handleChangeMessage={handleChangeMessage}
           handleSubmitMessage={handleSubmitMessage}
+          setEmoji={handleSetEmoji}
         />
       </>}
       {!room.name &&

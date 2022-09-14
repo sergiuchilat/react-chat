@@ -1,6 +1,6 @@
 import calendar from '../../../../assets/img/icons/calendar.png';
 
-export default function MessageSearchActions({ handlerSearch }) {
+export default function MessageSearchActions({ handleCloseSearch, handleSearch }) {
   return (
     <div className={'message-search-actions'}>
       <button className={'search-date'}>
@@ -12,13 +12,14 @@ export default function MessageSearchActions({ handlerSearch }) {
         />
       </button>
       <button
+        onClick={() => handleSearch()}
         className={'search'}
       >
         Search
       </button>
       <button
         className={'search-cancel'}
-        onClick={ () => handlerSearch() }
+        onClick={ () => handleCloseSearch() }
       >
         Cancel
       </button>

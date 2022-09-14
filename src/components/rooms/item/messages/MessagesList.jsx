@@ -8,6 +8,7 @@ export default function MessagesList({ messages }){
         messages.length !== 0 && messages.map(message => (
           <MessageItem
             message={message.text}
+            senderId={message.sender_id}
             key={message.id}
           />
         ))

@@ -1,7 +1,7 @@
 import search from '../../../../assets/img/icons/loupe.png';
 import MessageSearchActions from './MessageSearchActions';
 
-export default function MessageSearch({ handlerSearch }){
+export default function MessageSearch({ handleCloseSearch, handleChangeSearch, handleSearch }){
   return (
     <div className={'message-search'}>
       <div className={'message-search-inner'}>
@@ -13,12 +13,16 @@ export default function MessageSearch({ handlerSearch }){
           style={{ marginRight: 10 }}
         />
         <input
+          onChange={(e) => handleChangeSearch(e.target.value)}
           placeholder={'Search Message'}
           className={'message-search-input'}
           type={'text'}
         />
       </div>
-      <MessageSearchActions handlerSearch={ handlerSearch } />
+      <MessageSearchActions
+        handleCloseSearch={ handleCloseSearch }
+        handleSearch={handleSearch}
+      />
     </div>
   );
 }

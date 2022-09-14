@@ -19,7 +19,6 @@ export default function RoomsList({ onSelect }){
   const fetchRoomsL = async () => {
     try {
       const response = await (new RoomsApi()).getRoomsList();
-      console.log(response);
     } catch (e) {
       console.log(e);
     }
@@ -30,7 +29,6 @@ export default function RoomsList({ onSelect }){
       const response = await (new RoomsApi()).addMember('ffefaa84-d59e-44a5-b019-54ba85811534',{
         external_user_uuid: '469|EuJScKNah0QvVzJnFnDxl5shTN6f9ZvkiMGfUtWU',
       });
-      console.log(response);
     } catch (e) {
       console.log(e);
     }
@@ -78,7 +76,6 @@ export default function RoomsList({ onSelect }){
           ))
         }
       </div>
-      <button onClick={() => addMember()}>+</button>
     </div>
   );
 }

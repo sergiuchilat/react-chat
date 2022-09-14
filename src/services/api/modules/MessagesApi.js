@@ -1,14 +1,21 @@
 import ApiModel from 'services/api/ApiModel';
-import messages from 'data/mock/messages';
+import messages from '../../../data/mock/messages';
 export default class MessagesApi extends ApiModel{
   constructor () {
     super();
     this.resourceUrl = 'messages';
   }
 
-  async getRoomMessages(roomId) {
-    return await new Promise((resolve) => {
+  async getRoomMessages(roomId, searchString = '') {
+    const roomMessages = await new Promise((resolve) => {
       resolve(messages.filter(message => message.room_id === roomId));
+    });
+    return await new Promise((resolve) => {
+      const response = roomMessages.filter(
+        message => searchString === '' ||
+          (message.text.toLowerCase().search(searchString.toLowerCase()) !== -1)
+      );
+      resolve(response);
     });
   }
 
