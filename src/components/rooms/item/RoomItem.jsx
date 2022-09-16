@@ -90,10 +90,13 @@ export default function RoomItem({ id }){
               handleChangeSearch={ handleChangeSearch }
               handleSearch={ handleSearch }
             />}
-        <MessagesList
-          roomId={id}
-          messages={messages}
-        />
+        <div className={'messages_wrapper'}>
+          <MessagesList
+            roomId={id}
+            messages={messages}
+          />
+        </div>
+
         <MessageCreate
           message={message}
           handleChangeMessage={handleChangeMessage}
