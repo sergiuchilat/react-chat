@@ -31,4 +31,13 @@ export default class RoomsApi extends ApiModel{
   async addMember(roomId, payload) {
     return await this.http.post(`${this.resourceUrl}/${roomId}/members/`, payload);
   }
+  async getMessages(roomUuid) {
+    return await this.http.get(`${this.resourceUrl}/${roomUuid}/messages/`);
+  }
+  async getMembers(roomUuid) {
+    return await this.http.get(`${this.resourceUrl}/${roomUuid}/members/`);
+  }
+  async delRoom(roomUuid, payload) {
+    return await this.http.delete(`${this.resourceUrl}/${roomUuid}/`, payload);
+  }
 }

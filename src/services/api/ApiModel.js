@@ -15,6 +15,7 @@ export default class ApiModel{
       config => {
         const queryConfig = config;
         queryConfig.headers.common['X-localization'] = 'ru';
+        queryConfig.headers['Access-Control-Allow-Methods'] = '*';
         if(user && user.token){
           queryConfig.headers.Authorization = `Bearer ${user.token}`;
         }

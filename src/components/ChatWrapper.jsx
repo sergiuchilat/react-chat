@@ -13,7 +13,7 @@ export default function ChatWrapper(){
   return (
     <div id={'wrapper'}>
       <RoomsList onSelect={onRoomSelectHandle} />
-      <RoomItem id={selectedRoom} />
+      <RoomItem roomUuid={selectedRoom} />
     </div>
   );
 }

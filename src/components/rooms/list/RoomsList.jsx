@@ -7,48 +7,27 @@ export default function RoomsList({ onSelect }){
   const [rooms, setRooms] = useState([]);
   const [searchString, setSearchString] = useState('');
   const [activeRoom, setActiveRoom] = useState(null);
+  // const fetchRoomsList = async () => {
+  //   try {
+  //     const response = await (new RoomsApi()).get(searchString);
+  //     setRooms(response);
+  //   } catch (e){
+  //     console.log(e);
+  //   }
+  // };
+
   const fetchRoomsList = async () => {
     try {
-      const response = await (new RoomsApi()).get(searchString);
-      setRooms(response);
-    } catch (e){
-      console.log(e);
-    }
-  };
-
-  const fetchRoomsL = async () => {
-    try {
       const response = await (new RoomsApi()).getRoomsList();
-    } catch (e) {
-      console.log(e);
-    }
-  };
-
-  const addMember = async () => {
-    try {
-      const response = await (new RoomsApi()).addMember('ffefaa84-d59e-44a5-b019-54ba85811534',{
-        external_user_uuid: '469|EuJScKNah0QvVzJnFnDxl5shTN6f9ZvkiMGfUtWU',
-      });
-    } catch (e) {
-      console.log(e);
-    }
-  };
-
-  const createRoom = async () => {
-    try {
-      await (new RoomsApi()).createRoom({
-        name: 'Vicu',
-        avatar_link: 'asd',
-      });
-      await fetchRoomsL();
+      setRooms(response.data);
     } catch (e) {
       console.log(e);
     }
   };
 
   useEffect(() => {
+    // fetchRoomsList();
     fetchRoomsList();
-    fetchRoomsL();
   }, [searchString]);
 
   const onRoomSelectHandle = (roomId) => {
@@ -68,8 +47,8 @@ export default function RoomsList({ onSelect }){
           rooms.length !== 0 && rooms.map(room => (
             <RoomItem
               name={room.name}
-              id={room.id}
-              key={room.id}
+              id={room.uuid}
+              key={room.uuid}
               onSelect={onRoomSelectHandle}
               activeRoom={activeRoom}
             />

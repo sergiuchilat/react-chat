@@ -1,7 +1,7 @@
 import Picker from 'emoji-picker-react';
-import smile from '../../../../assets/img/icons/smile.png';
-import attachment from '../../../../assets/img/icons/attachment.png';
-import send from '../../../../assets/img/icons/send.png';
+import smile from '../../../../../assets/img/icons/smile.png';
+import attachment from '../../../../../assets/img/icons/attachment.png';
+import send from '../../../../../assets/img/icons/send.png';
 import { useState } from 'react';
 
 export default function MessageCreateActions({ handleSubmitMessage, setEmoji }) {
@@ -37,7 +37,7 @@ export default function MessageCreateActions({ handleSubmitMessage, setEmoji }) 
         />
       </button>
       <button
-        onClick={(e) => handleSubmitMessage(e.target.value)}
+        onClick={(e) => handleSubmitMessage()}
         className={'send-message'}
       >
         <img

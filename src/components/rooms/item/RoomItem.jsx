@@ -1,12 +1,13 @@
 import RoomName from './RoomName';
 import MessageSearch from './messages/MessageSearch';
 import MessagesList from './messages/MessagesList';
-import MessageCreate from './messages/MessageCreate';
+import MessageCreate from './messages/create/MessageCreate';
 import { useEffect, useState, useCallback } from 'react';
 import RoomsApi from '../../../services/api/modules/RoomsApi';
 import MessagesApi from '../../../services/api/modules/MessagesApi';
+import MessageEdit from './messages/edit/MessageEdit';
 
-export default function RoomItem({ id }){
+export default function RoomItem({ roomUuid }){
 
   const [room, setRoom] = useState({
     name: ''
@@ -14,42 +15,66 @@ export default function RoomItem({ id }){
   const [messages, setMessages] = useState([]);
   const [messageSearch, setMessageSearch] = useState('');
   const [message, setMessage] = useState('');
+  const [myUuid, setMyUuid] = useState(null);
   const [searchMessageMode, setSearchMessageMode] = useState(false);
-  const fetchRoomItem = async () => {
+  const [editMode, setEditMode] = useState(false);
+
+  const fetchRoomMessages = async () => {
     try {
-      if(id){
-        const response = await (new RoomsApi()).getById(id);
-        setRoom(response);
+      const response = await (new RoomsApi()).getMessages(roomUuid);
+      if(response.data){
+        setMessages(response.data);
       }
     } catch (e){
       console.log(e);
     }
   };
 
-  const handleSubmitMessage = () => {
-    if(message.trim().length) {
-      messages.push({
-        id: Date.now(),
-        text: message,
-        room_id: id,
-        sender_id: 1,
-        receiver_id: 2,
-      });
+  const fetchRoomItem = async () => {
+    try {
+      if(roomUuid){
+        await fetchRoomMessages();
+        const members = await fetchRoomMembers();
+        if(members.data) {
+          setMyUuid(members.data.find(item =>
+            item.external_user_uuid === 'c54cf8e0-34cd-11ed-a261-0242ac120002').uuid);
+          setRoom({ name: 'Vicu' });
+        }
+      }
+    } catch (e){
+      console.log(e);
     }
-    setMessage('');
+  };
+
+  const fetchRoomMembers = useCallback(async() => {
+    try {
+      const response = await (new RoomsApi()).getMembers(roomUuid);
+      return response;
+    } catch (e) {
+      console.log(e);
+    }
+  }, [roomUuid]);
+
+  const handleSubmitMessage = async () => {
+    try {
+      if(message.trim().length) {
+        const response = await (new MessagesApi()).createMessage({
+          text: message,
+          room_uuid: roomUuid,
+          sender_uuid: myUuid,
+        });
+        if(response) {
+          await fetchRoomMessages();
+        }
+      }
+      setMessage('');
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   const handleChangeMessage = (message) => {
     setMessage(message);
-  };
-
-  const fetchRoomMessages = async () => {
-    try {
-      const response = await (new MessagesApi()).getRoomMessages(id, messageSearch);
-      setMessages(response);
-    } catch (e){
-      console.log(e);
-    }
   };
 
   const clearSearchMessage = useCallback(() => {
@@ -58,7 +83,6 @@ export default function RoomItem({ id }){
 
   const handlerSearchMode = async () => {
     clearSearchMessage();
-    console.log(messageSearch);
     setSearchMessageMode(searchMessageMode => !searchMessageMode);
   };
   const handleChangeSearch = (value) => {
@@ -67,14 +91,24 @@ export default function RoomItem({ id }){
   const handleSetEmoji = (emoji) => {
     setMessage(message + emoji);
   };
-  const handleSearch = () => {
-    fetchRoomMessages();
+  const handleSearch = async () => {
+    await fetchRoomMessages();
   };
-
+  const handleDeleteMessage = async (messageUuid) => {
+    try {
+      const conf = confirm('Are you sure?');
+      if(conf) {
+        const response = (new MessagesApi()).deleteMessage(messageUuid);
+      }
+      await fetchRoomMessages();
+    } catch (e) {
+      console.log(e);
+    }
+  };
   useEffect(() => {
     fetchRoomItem();
-    fetchRoomMessages();
-  }, [id]);
+    // fetchRoomMessages();
+  }, [roomUuid]);
 
   return (
     <div className={`${room.name && 'rooms-item'} room`}>
@@ -91,15 +125,17 @@ export default function RoomItem({ id }){
               handleSearch={ handleSearch }
             />}
         <MessagesList
-          roomId={id}
+          myUuid={myUuid}
           messages={messages}
+          handleDeleteMessage={handleDeleteMessage}
         />
-        <MessageCreate
+        {editMode && <MessageEdit />}
+        {!editMode && <MessageCreate
           message={message}
           handleChangeMessage={handleChangeMessage}
           handleSubmitMessage={handleSubmitMessage}
           setEmoji={handleSetEmoji}
-        />
+        />}
       </>}
       {!room.name &&
         <h1 className={'room-text'}>Choose a room</h1>}

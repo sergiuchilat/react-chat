@@ -51,6 +51,8 @@ input:focus {
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
+  height: 440px;
+  overflow-y: auto;
   margin-bottom: 10px;
 }
 
@@ -99,10 +101,23 @@ input:focus {
 .message-item-inner {
   display: flex;
   align-items: flex-end;
+}
+.messages-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   margin: 5px 10px;
+}
+.messages-item-actions {
+  flex-shrink: 0;
+  margin-right: 10px;
+}
+.flex-end{
+  justify-content: flex-end;
 }
 .message-item {
   margin-left: 5px;
+  margin-right: 55px;
   background-color: #EAEAEA;
   padding: 10px;
   border-radius: 10px;
@@ -174,6 +189,10 @@ input:focus {
 }
 .my-message-item-inner{
   justify-content: end;
+  margin: 0 0 0 66px;
+}
+.messages-hover{
+  margin: 0;
 }
 .my-message-item{
   background-color: #007AFF;
