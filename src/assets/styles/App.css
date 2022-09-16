@@ -204,3 +204,8 @@ input:focus {
   border-radius: 10px;
   padding: 5px;
 }
+.messages_wrapper{
+  display: grid;
+  overflow-y: auto;
+  max-height: 450px;
+}
