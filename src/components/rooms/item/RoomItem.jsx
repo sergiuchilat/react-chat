@@ -86,10 +86,10 @@ export default function RoomItem({ id }){
             />}
         {searchMessageMode &&
             <MessageSearch
-              handleCloseSearch={ handlerSearchMode }
-              handleChangeSearch={ handleChangeSearch }
-              handleSearch={ handleSearch }
-            />}
+            handleCloseSearch={ handlerSearchMode }
+            handleChangeSearch={ handleChangeSearch }
+            handleSearch={ handleSearch }
+        />}
         <MessagesList
           myUuid={myUuid}
           messages={messages}
@@ -101,7 +101,7 @@ export default function RoomItem({ id }){
           handleChangeMessage={handleChangeMessage}
           handleSubmitMessage={handleSubmitMessage}
           setEmoji={handleSetEmoji}
-        />
+        />}
       </>}
       {!room.name &&
         <h1 className={'room-text'}>Choose a room</h1>}
