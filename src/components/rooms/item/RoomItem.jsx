@@ -1,8 +1,8 @@
 import RoomName from './RoomName';
 import MessageSearch from './messages/MessageSearch';
-import MessagesList from './messages/MessagesList';
+import { MessagesList } from './messages/MessagesList';
 import MessageCreate from './messages/create/MessageCreate';
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useRef } from 'react';
 import RoomsApi from '../../../services/api/modules/RoomsApi';
 import MessagesApi from '../../../services/api/modules/MessagesApi';
 import MessageEdit from './messages/edit/MessageEdit';
@@ -17,7 +17,9 @@ export default function RoomItem({ roomUuid }){
   const [message, setMessage] = useState('');
   const [myUuid, setMyUuid] = useState(null);
   const [searchMessageMode, setSearchMessageMode] = useState(false);
-  const [editMode, setEditMode] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [updatingMessage, setUpdatingMessage] = useState({});
+  const messagesList = useRef();
 
   const fetchRoomMessages = async () => {
     try {
@@ -33,6 +35,7 @@ export default function RoomItem({ roomUuid }){
   const fetchRoomItem = async () => {
     try {
       if(roomUuid){
+        setLoading(true);
         await fetchRoomMessages();
         const members = await fetchRoomMembers();
         if(members.data) {
@@ -43,13 +46,22 @@ export default function RoomItem({ roomUuid }){
       }
     } catch (e){
       console.log(e);
+    } finally {
+      setLoading(false);
+      setTimeout(() => {
+        if(messagesList.current){
+          messagesList.current.scrollTop = messagesList.current.scrollHeight;
+        }
+      }, 0);
     }
   };
 
   const fetchRoomMembers = useCallback(async() => {
     try {
       const response = await (new RoomsApi()).getMembers(roomUuid);
-      return response
+      if(response.data) {
+        return response;
+      }
     } catch (e) {
       console.log(e);
     }
@@ -98,14 +110,44 @@ export default function RoomItem({ roomUuid }){
     try {
       const conf = confirm('Are you sure?');
       if(conf) {
-        const response = (new MessagesApi()).deleteMessage(messageUuid);
+        const response = await (new MessagesApi()).deleteMessage(messageUuid);
+        if(response.status === 204){
+          await fetchRoomMessages();
+        }
+        if(Object.keys(updatingMessage).length !== 0) {
+          setUpdatingMessage({});
+        }
       }
-      await fetchRoomMessages();
     } catch (e) {
       console.log(e);
     }
   };
-  useEffect(() => {
+  const handleSetUpdatingMessage = (message) => {
+    setUpdatingMessage(message);
+  };
+  const handleUpdateMessage = async (messageUuid) => {
+    try{
+      if(updatingMessage.text.length) {
+        const response = await (new MessagesApi()).updateMessage(messageUuid, {
+          text: updatingMessage.text,
+          sender_uuid: updatingMessage.sender_uuid,
+          room_uuid: updatingMessage.room_uuid
+        });
+        setUpdatingMessage({});
+        if (response.data) {
+          await fetchRoomMessages();
+        }
+      } else {
+        await handleDeleteMessage(messageUuid);
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
+  const handleChangeUpdatingMessage = (message) => {
+    setUpdatingMessage({ ...updatingMessage, text: message });
+  };
+  useEffect( () => {
     fetchRoomItem();
     // fetchRoomMessages();
   }, [roomUuid]);
@@ -124,13 +166,24 @@ export default function RoomItem({ roomUuid }){
               handleChangeSearch={ handleChangeSearch }
               handleSearch={ handleSearch }
             />}
-        <MessagesList
-          myUuid={myUuid}
-          messages={messages}
+        {loading && <div style={{ textAlign: 'center' }}>Loading...</div>}
+        {!loading &&  <div className={'messages_wrapper'}>
+          <MessagesList
+            ref={messagesList}
+            myUuid={myUuid}
+            messages={messages}
+            handleDeleteMessage={handleDeleteMessage}
+            handleUpdateMessage={handleSetUpdatingMessage}
+          />
+        </div>}
+
+        {Object.keys(updatingMessage).length !== 0 && <MessageEdit
+          updatingMessage={updatingMessage}
+          handleUpdateMessage={handleUpdateMessage}
+          handleChangeUpdatingMessage={handleChangeUpdatingMessage}
           handleDeleteMessage={handleDeleteMessage}
-        />
-        {editMode && <MessageEdit />}
-        {!editMode && <MessageCreate
+        />}
+        {Object.keys(updatingMessage).length === 0 && <MessageCreate
           message={message}
           handleChangeMessage={handleChangeMessage}
           handleSubmitMessage={handleSubmitMessage}

@@ -1,9 +1,34 @@
 import attachment from '../../../../../assets/img/icons/attachment.png';
 import send from '../../../../../assets/img/icons/send.png';
+import { useState } from 'react';
+import smile from '../../../../../assets/img/icons/smile.png';
+import bin from '../../../../../assets/img/icons/rubbish-bin.png';
+import Picker from 'emoji-picker-react';
+export default function MessageEditActions({ handleUpdateMessage, setEmoji, updatingMessage, handleDeleteMessage }) {
+  const [emojiDialog, setEmojiDialog] = useState(false);
 
-export default function MessageEditActions({ handleSubmitMessage }) {
+  const onEmojiClick = (event, emojiObject) => {
+    setEmoji(emojiObject.emoji);
+  };
+
   return (
     <>
+      <button
+        onClick={() => setEmojiDialog(emojiDialog => !emojiDialog)}
+        className={`send-message ${emojiDialog ? 'emoji-dialog': ''}`}
+      >
+        <img
+          width={25}
+          height={25}
+          src={smile}
+          alt={'Emoji'}
+        />
+      </button>
+      {emojiDialog && <Picker
+        preload
+        disableSearchBar
+        onEmojiClick={onEmojiClick}
+      />}
       <button className={'send-message'}>
         <img
           width={25}
@@ -12,8 +37,8 @@ export default function MessageEditActions({ handleSubmitMessage }) {
           alt={'attachment'}
         />
       </button>
-      <button
-        onClick={(e) => handleSubmitMessage()}
+      {updatingMessage.text.length !== 0 && <button
+        onClick={() => handleUpdateMessage(updatingMessage.uuid)}
         className={'send-message'}
       >
         <img
@@ -22,7 +47,18 @@ export default function MessageEditActions({ handleSubmitMessage }) {
           src={send}
           alt={'Send'}
         />
-      </button>
+      </button>}
+      {updatingMessage.text.length === 0 &&<button
+        onClick={() => handleDeleteMessage(updatingMessage.uuid)}
+        className={'send-message'}
+      >
+        <img
+          width={25}
+          height={25}
+          src={bin}
+          alt={'delete'}
+        />
+      </button>}
     </>
   );
 }

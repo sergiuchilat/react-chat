@@ -46,8 +46,7 @@ export default function RoomsList({ onSelect }){
         {
           rooms.length !== 0 && rooms.map(room => (
             <RoomItem
-              name={room.name}
-              id={room.uuid}
+              room={room}
               key={room.uuid}
               onSelect={onRoomSelectHandle}
               activeRoom={activeRoom}

@@ -1,11 +1,11 @@
 import avatar from './../../../assets/img/icons/avatar.png';
 
-export default function RoomItem({ id, name, onSelect, activeRoom }){
+export default function RoomItem({ room, onSelect, activeRoom }){
 
   return (
     <div
-      className={`room-list-item ${activeRoom === id ? 'room-list-item--active' : ''}`}
-      onClick={() => {onSelect(id);}}
+      className={`room-list-item ${activeRoom === room.uuid ? 'room-list-item--active' : ''}`}
+      onClick={() => {onSelect(room.uuid);}}
     >
       <img
         width={30}
@@ -13,7 +13,10 @@ export default function RoomItem({ id, name, onSelect, activeRoom }){
         src={avatar}
         alt={'avatar'}
       />
-      <h4 className={'room-list-title'}>{name}</h4>
+      <div className={'room-list-header'}>
+        <h4 className={'room-list-title'}>{room.name}</h4>
+        <p className={'room-list-last'}>{room.last_message}</p>
+      </div>
     </div>
   );
 }

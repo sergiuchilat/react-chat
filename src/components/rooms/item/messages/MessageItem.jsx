@@ -3,7 +3,7 @@ import pen from '../../../../assets/img/icons/pen.png';
 import bin from '../../../../assets/img/icons/rubbish-bin.png';
 import { useState } from 'react';
 
-export default function MessageItem({ myUuid, message, handleDeleteMessage }){
+export default function MessageItem({ myUuid, message, handleDeleteMessage, handleUpdateMessage }){
   const [isHover, setIsHover] = useState(false);
 
   const handleMouseEnter = () => {
@@ -35,7 +35,7 @@ export default function MessageItem({ myUuid, message, handleDeleteMessage }){
       {message.sender_uuid === myUuid &&
         <div className={`messages-wrapper ${!isHover ? 'flex-end' : ''}`}>
           {isHover && <div className={'messages-item-actions'}>
-            <button>
+            <button onClick={() => handleUpdateMessage(message)}>
               <img
                 src={pen}
                 alt={'pen'}

@@ -1,19 +1,21 @@
 import MessageEditActions from './MessageEditActions';
 
-export default function MessageEdit() {
+export default function MessageEdit({ updatingMessage, handleUpdateMessage, handleChangeUpdatingMessage, handleDeleteMessage }) {
   return (
     <div className={'message-create'}>
-      {/* <input
+      <input
         placeholder={'Type your message...'}
-        value={message}
-        onChange={(e) => handleChangeMessage(e.target.value)}
-        onKeyDown={(e) => e.key === 'Enter' && handleEditMessage(e.target.value)}
+        value={updatingMessage.text}
+        onChange={(e) => handleChangeUpdatingMessage(e.target.value)}
+        onKeyDown={(e) => e.key === 'Enter' && handleUpdateMessage(updatingMessage.uuid)}
         className={'rooms-search-input rooms-message-input'}
         type={'text'}
       />
       <MessageEditActions
-        handleSubmitMessage={handleSubmitMessage}
-      />*/}
+        handleUpdateMessage={handleUpdateMessage}
+        updatingMessage={updatingMessage}
+        handleDeleteMessage={handleDeleteMessage}
+      />
     </div>
   );
 }

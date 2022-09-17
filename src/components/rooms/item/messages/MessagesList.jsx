@@ -1,15 +1,19 @@
 import MessageItem from './MessageItem';
+import { forwardRef } from 'react';
 
-export default function MessagesList({ myUuid, messages, handleDeleteMessage }){
-
+export const MessagesList = forwardRef(({ myUuid, messages, handleDeleteMessage, handleUpdateMessage },  ref) => {
   return (
-    <div className={'messages'}>
+    <div
+      ref={ref}
+      className={'messages'}
+    >
       {
         messages.length !== 0 && messages.map(message => (
           <MessageItem
             myUuid={myUuid}
             message={message}
             handleDeleteMessage={handleDeleteMessage}
+            handleUpdateMessage={handleUpdateMessage}
             key={message.uuid}
           />
         ))
@@ -20,4 +24,5 @@ export default function MessagesList({ myUuid, messages, handleDeleteMessage }){
       }
     </div>
   );
-}
+});
+MessagesList.displayName = 'messages';

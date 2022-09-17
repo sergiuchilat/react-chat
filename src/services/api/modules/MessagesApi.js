@@ -30,4 +30,7 @@ export default class MessagesApi extends ApiModel{
   async deleteMessage(messageUuid) {
     return await this.http.delete(`${this.resourceUrl}/${messageUuid}/`);
   }
+  async updateMessage(messageUuid, payload) {
+    return await this.http.patch(`${this.resourceUrl}/${messageUuid}/`, payload);
+  }
 }
