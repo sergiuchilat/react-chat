@@ -1,11 +1,11 @@
 import RoomName from './RoomName';
 import MessageSearch from './messages/MessageSearch';
 import { MessagesList } from './messages/MessagesList';
-import MessageCreate from './messages/create/MessageCreate';
+import { MessageCreate } from './messages/create/MessageCreate';
 import { useEffect, useState, useCallback, useRef } from 'react';
 import RoomsApi from '../../../services/api/modules/RoomsApi';
 import MessagesApi from '../../../services/api/modules/MessagesApi';
-import MessageEdit from './messages/edit/MessageEdit';
+import { MessageEdit } from './messages/edit/MessageEdit';
 
 export default function RoomItem({ roomUuid }){
 
@@ -20,7 +20,8 @@ export default function RoomItem({ roomUuid }){
   const [loading, setLoading] = useState(false);
   const [updatingMessage, setUpdatingMessage] = useState({});
   const messagesList = useRef();
-
+  const createInput = useRef();
+  const editInput = useRef();
   const fetchRoomMessages = async () => {
     try {
       const response = await (new RoomsApi()).getMessages(roomUuid);
@@ -38,24 +39,34 @@ export default function RoomItem({ roomUuid }){
         setLoading(true);
         await fetchRoomMessages();
         const members = await fetchRoomMembers();
+        await fetchRoom(roomUuid);
         if(members.data) {
           setMyUuid(members.data.find(item =>
             item.external_user_uuid === 'c54cf8e0-34cd-11ed-a261-0242ac120002').uuid);
-          setRoom({ name: 'Vicu' });
         }
       }
     } catch (e){
       console.log(e);
     } finally {
       setLoading(false);
-      setTimeout(() => {
-        if(messagesList.current){
-          messagesList.current.scrollTop = messagesList.current.scrollHeight;
-        }
-      }, 0);
+      handleScrollToBottom();
     }
   };
-
+  const fetchRoom = async (roomUuid) => {
+    try {
+      const response = await (new RoomsApi()).getRoom(roomUuid);
+      if(response.data) {
+        setRoom({ name: response.data.name });
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
+  const handleScrollToBottom = () => {
+    if(messagesList.current){
+      messagesList.current.scrollTop = messagesList.current.scrollHeight;
+    }
+  };
   const fetchRoomMembers = useCallback(async() => {
     try {
       const response = await (new RoomsApi()).getMembers(roomUuid);
@@ -75,6 +86,7 @@ export default function RoomItem({ roomUuid }){
           room_uuid: roomUuid,
           sender_uuid: myUuid,
         });
+        handleScrollToBottom();
         if(response) {
           await fetchRoomMessages();
         }
@@ -101,7 +113,14 @@ export default function RoomItem({ roomUuid }){
     setMessageSearch(value);
   };
   const handleSetEmoji = (emoji) => {
-    setMessage(message + emoji);
+    /* if(updatingMessage) {
+      const cursor = editInput.current.selectionStart;
+      setUpdatingMessage(updatingMessage.text.slice(0, cursor) + emoji + updatingMessage.text.slice(cursor));
+      editInput.current.focus();
+    } else {*/
+    const cursor = createInput.current.selectionStart;
+    setMessage(message.slice(0, cursor) + emoji + message.slice(cursor));
+    createInput.current.focus();
   };
   const handleSearch = async () => {
     await fetchRoomMessages();
@@ -144,11 +163,15 @@ export default function RoomItem({ roomUuid }){
       console.log(e);
     }
   };
+  const handleCancelUpdate = () => {
+    setUpdatingMessage({});
+  };
   const handleChangeUpdatingMessage = (message) => {
     setUpdatingMessage({ ...updatingMessage, text: message });
   };
   useEffect( () => {
     fetchRoomItem();
+    setUpdatingMessage({});
     // fetchRoomMessages();
   }, [roomUuid]);
 
@@ -176,19 +199,24 @@ export default function RoomItem({ roomUuid }){
             handleUpdateMessage={handleSetUpdatingMessage}
           />
         </div>}
-
-        {Object.keys(updatingMessage).length !== 0 && <MessageEdit
-          updatingMessage={updatingMessage}
-          handleUpdateMessage={handleUpdateMessage}
-          handleChangeUpdatingMessage={handleChangeUpdatingMessage}
-          handleDeleteMessage={handleDeleteMessage}
-        />}
-        {Object.keys(updatingMessage).length === 0 && <MessageCreate
-          message={message}
-          handleChangeMessage={handleChangeMessage}
-          handleSubmitMessage={handleSubmitMessage}
-          setEmoji={handleSetEmoji}
-        />}
+        {Object.keys(updatingMessage).length !== 0 &&
+          <MessageEdit
+            updatingMessage={updatingMessage}
+            handleUpdateMessage={handleUpdateMessage}
+            handleChangeUpdatingMessage={handleChangeUpdatingMessage}
+            handleDeleteMessage={handleDeleteMessage}
+            handleCancelUpdate={handleCancelUpdate}
+            setEmoji={handleSetEmoji}
+            ref={editInput}
+          />}
+        {Object.keys(updatingMessage).length === 0 &&
+          <MessageCreate
+            message={message}
+            handleChangeMessage={handleChangeMessage}
+            handleSubmitMessage={handleSubmitMessage}
+            setEmoji={handleSetEmoji}
+            ref={createInput}
+          />}
       </>}
       {!room.name &&
         <h1 className={'room-text'}>Choose a room</h1>}

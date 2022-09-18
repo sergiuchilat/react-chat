@@ -10,7 +10,6 @@ export default function MessageEditActions({ handleUpdateMessage, setEmoji, upda
   const onEmojiClick = (event, emojiObject) => {
     setEmoji(emojiObject.emoji);
   };
-
   return (
     <>
       <button

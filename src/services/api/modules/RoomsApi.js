@@ -25,6 +25,9 @@ export default class RoomsApi extends ApiModel{
   async getRoomsList() {
     return await this.http.get(`${this.resourceUrl}/`);
   }
+  async getRoom(roomUuid) {
+    return await this.http.get(`${this.resourceUrl}/${roomUuid}/`);
+  }
   async createRoom(payload) {
     return await this.http.post(`${this.resourceUrl}/`, payload);
   }

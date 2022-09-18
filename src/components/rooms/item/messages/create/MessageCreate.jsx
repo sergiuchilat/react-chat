@@ -1,14 +1,15 @@
 import MessageCreateActions from './MessageCreateActions';
+import { forwardRef } from 'react';
 
-export default function MessageCreate({ message, handleChangeMessage, handleSubmitMessage, setEmoji }) {
-
+export const MessageCreate = forwardRef(({ message, handleChangeMessage, handleSubmitMessage, setEmoji }, ref) => {
   return (
     <div className={'message-create'}>
       <input
+        ref={ref}
         placeholder={'Type your message...'}
         value={message}
         onChange={(e) => handleChangeMessage(e.target.value)}
-        onKeyDown={(e) => e.key === 'Enter' && handleSubmitMessage(e.target.value)}
+        onKeyDown={(e) => e.key === 'Enter' && handleSubmitMessage()}
         className={'rooms-search-input rooms-message-input'}
         type={'text'}
       />
@@ -18,4 +19,6 @@ export default function MessageCreate({ message, handleChangeMessage, handleSubm
       />
     </div>
   );
-}
+});
+
+MessageCreate.displayName = 'messageCreate';

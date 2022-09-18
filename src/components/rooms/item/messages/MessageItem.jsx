@@ -5,11 +5,18 @@ import { useState } from 'react';
 
 export default function MessageItem({ myUuid, message, handleDeleteMessage, handleUpdateMessage }){
   const [isHover, setIsHover] = useState(false);
-
   const handleMouseEnter = () => {
     setIsHover(true);
   };
-
+  const padTo2Digits = (num) => {
+    return num.toLocaleString().padStart(2, '0');
+  };
+  const formatDate = (date) => {
+    return (
+      `${padTo2Digits(date.getHours())}:${padTo2Digits(date.getMinutes())} `
+    );
+  };
+  const createdAt = formatDate(new Date(Number(message.created_at)));
   const handleMouseLeave = () => {
     setIsHover(false);
   };
@@ -29,6 +36,9 @@ export default function MessageItem({ myUuid, message, handleDeleteMessage, hand
           />
           <div className={'message-item'}>
             {message.text}
+            <span className={'message-date'}>
+              {createdAt}
+            </span>
           </div>
         </div>
       </div>}
@@ -53,6 +63,9 @@ export default function MessageItem({ myUuid, message, handleDeleteMessage, hand
             ${isHover ? 'messages-hover' : ''}`}
           >
             <div className={'message-item my-message-item'}>
+              <span className={'message-date'}>
+                {createdAt}
+              </span>
               {message.text}
             </div>
             <img
