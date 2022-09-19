@@ -1,6 +1,4 @@
-
-export default function RoomSearch({ onSearch }){
-
+export default function RoomSearch({ onSearch }) {
   const handleSearch = (e) => {
     onSearch(e.target.value);
   };

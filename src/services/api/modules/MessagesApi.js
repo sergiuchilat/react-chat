@@ -1,7 +1,7 @@
 import ApiModel from 'services/api/ApiModel';
 import messages from '../../../data/mock/messages';
-export default class MessagesApi extends ApiModel{
-  constructor () {
+export default class MessagesApi extends ApiModel {
+  constructor() {
     super();
     this.resourceUrl = 'messages';
   }
@@ -19,18 +19,21 @@ export default class MessagesApi extends ApiModel{
   //   });
   // }
   async createMessage(payload) {
-    return await this.http.post(`${this.resourceUrl}/` ,payload);
+    return await this.http.post(`${this.resourceUrl}/`, payload);
   }
 
   async getById(id) {
     return await new Promise((resolve) => {
-      resolve(messages.find(message => message.id === id));
+      resolve(messages.find((message) => message.id === id));
     });
   }
   async deleteMessage(messageUuid) {
     return await this.http.delete(`${this.resourceUrl}/${messageUuid}/`);
   }
   async updateMessage(messageUuid, payload) {
-    return await this.http.patch(`${this.resourceUrl}/${messageUuid}/`, payload);
+    return await this.http.patch(
+      `${this.resourceUrl}/${messageUuid}/`,
+      payload
+    );
   }
 }

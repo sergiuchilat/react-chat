@@ -4,7 +4,12 @@ import { useState } from 'react';
 import smile from '../../../../../assets/img/icons/smile.png';
 import bin from '../../../../../assets/img/icons/rubbish-bin.png';
 import Picker from 'emoji-picker-react';
-export default function MessageEditActions({ handleUpdateMessage, setEmoji, updatingMessage, handleDeleteMessage }) {
+export default function MessageEditActions({
+  handleUpdateMessage,
+  setEmoji,
+  updatingMessage,
+  handleDeleteMessage,
+}) {
   const [emojiDialog, setEmojiDialog] = useState(false);
 
   const onEmojiClick = (event, emojiObject) => {
@@ -13,51 +18,33 @@ export default function MessageEditActions({ handleUpdateMessage, setEmoji, upda
   return (
     <>
       <button
-        onClick={() => setEmojiDialog(emojiDialog => !emojiDialog)}
-        className={`send-message ${emojiDialog ? 'emoji-dialog': ''}`}
+        onClick={() => setEmojiDialog((emojiDialog) => !emojiDialog)}
+        className={`send-message ${emojiDialog ? 'emoji-dialog' : ''}`}
       >
-        <img
-          width={25}
-          height={25}
-          src={smile}
-          alt={'Emoji'}
-        />
+        <img width={25} height={25} src={smile} alt={'Emoji'} />
       </button>
-      {emojiDialog && <Picker
-        preload
-        disableSearchBar
-        onEmojiClick={onEmojiClick}
-      />}
+      {emojiDialog && (
+        <Picker preload disableSearchBar onEmojiClick={onEmojiClick} />
+      )}
       <button className={'send-message'}>
-        <img
-          width={25}
-          height={25}
-          src={attachment}
-          alt={'attachment'}
-        />
+        <img width={25} height={25} src={attachment} alt={'attachment'} />
       </button>
-      {updatingMessage.text.length !== 0 && <button
-        onClick={() => handleUpdateMessage(updatingMessage.uuid)}
-        className={'send-message'}
-      >
-        <img
-          width={25}
-          height={25}
-          src={send}
-          alt={'Send'}
-        />
-      </button>}
-      {updatingMessage.text.length === 0 &&<button
-        onClick={() => handleDeleteMessage(updatingMessage.uuid)}
-        className={'send-message'}
-      >
-        <img
-          width={25}
-          height={25}
-          src={bin}
-          alt={'delete'}
-        />
-      </button>}
+      {updatingMessage.text.length !== 0 && (
+        <button
+          onClick={() => handleUpdateMessage(updatingMessage.uuid)}
+          className={'send-message'}
+        >
+          <img width={25} height={25} src={send} alt={'Send'} />
+        </button>
+      )}
+      {updatingMessage.text.length === 0 && (
+        <button
+          onClick={() => handleDeleteMessage(updatingMessage.uuid)}
+          className={'send-message'}
+        >
+          <img width={25} height={25} src={bin} alt={'delete'} />
+        </button>
+      )}
     </>
   );
 }

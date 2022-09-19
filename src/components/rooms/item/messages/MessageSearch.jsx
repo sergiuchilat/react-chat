@@ -1,7 +1,11 @@
 import search from '../../../../assets/img/icons/loupe.png';
 import MessageSearchActions from './MessageSearchActions';
 
-export default function MessageSearch({ handleCloseSearch, handleChangeSearch, handleSearch }){
+export default function MessageSearch({
+  handleCloseSearch,
+  handleChangeSearch,
+  handleSearch,
+}) {
   return (
     <div className={'message-search'}>
       <div className={'message-search-inner'}>
@@ -20,7 +24,7 @@ export default function MessageSearch({ handleCloseSearch, handleChangeSearch, h
         />
       </div>
       <MessageSearchActions
-        handleCloseSearch={ handleCloseSearch }
+        handleCloseSearch={handleCloseSearch}
         handleSearch={handleSearch}
       />
     </div>

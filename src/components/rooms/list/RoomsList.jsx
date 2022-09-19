@@ -2,38 +2,18 @@ import RoomItem from './RoomItem';
 import RoomSearch from './RoomSearch';
 import { useEffect, useState } from 'react';
 import RoomsApi from 'services/api/modules/RoomsApi';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchRooms } from '../../../store/Rooms';
 
-export default function RoomsList({ onSelect }){
-  const [rooms, setRooms] = useState([]);
+export default function RoomsList() {
   const [searchString, setSearchString] = useState('');
-  const [activeRoom, setActiveRoom] = useState(null);
-  // const fetchRoomsList = async () => {
-  //   try {
-  //     const response = await (new RoomsApi()).get(searchString);
-  //     setRooms(response);
-  //   } catch (e){
-  //     console.log(e);
-  //   }
-  // };
-
-  const fetchRoomsList = async () => {
-    try {
-      const response = await (new RoomsApi()).getRoomsList();
-      setRooms(response.data);
-    } catch (e) {
-      console.log(e);
-    }
-  };
+  const rooms = useSelector(state => state.rooms.roomsList)
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    // fetchRoomsList();
-    fetchRoomsList();
-  }, [searchString]);
+    dispatch(fetchRooms());
+  }, [dispatch]);
 
-  const onRoomSelectHandle = (roomId) => {
-    onSelect(roomId);
-    setActiveRoom(roomId);
-  };
 
   const onRoomSearch = (searchString) => {
     setSearchString(searchString);
@@ -43,16 +23,13 @@ export default function RoomsList({ onSelect }){
     <div className={'rooms-list-inner'}>
       <RoomSearch onSearch={onRoomSearch} />
       <div className={'rooms-list'}>
-        {
-          rooms.length !== 0 && rooms.map(room => (
+        {rooms.length !== 0 &&
+          rooms.map((room) => (
             <RoomItem
               room={room}
               key={room.uuid}
-              onSelect={onRoomSelectHandle}
-              activeRoom={activeRoom}
             />
-          ))
-        }
+          ))}
       </div>
     </div>
   );

@@ -1,4 +1,4 @@
-*{
+* {
   box-sizing: border-box;
 }
 button {
@@ -11,14 +11,14 @@ input:focus {
   outline: none;
 }
 
-#wrapper{
+#wrapper {
   display: grid;
   grid-template-columns: 2fr 5fr;
   margin: 0 auto;
   width: 800px;
 }
 
-#wrapper .rooms-list{
+#wrapper .rooms-list {
   cursor: pointer;
   padding-bottom: 10px;
   overflow-y: auto;
@@ -32,12 +32,12 @@ input:focus {
   align-items: center;
 }
 .message-create aside.emoji-picker-react,
-.message-edit aside.emoji-picker-react{
+.message-edit aside.emoji-picker-react {
   position: absolute;
   bottom: 54px;
   right: 0;
 }
-#wrapper .rooms-item .room-name{
+#wrapper .rooms-item .room-name {
   font-size: 23px;
   padding: 0 10px;
   border-top-right-radius: 10px;
@@ -46,7 +46,7 @@ input:focus {
   justify-content: space-between;
   box-shadow: 0 0 4px rgb(0 0 0 / 12%), 0 4px 4px rgb(0 0 0 / 5%);
 }
-.room{
+.room {
   box-shadow: 0 0 4px rgb(0 0 0 / 12%), 0 4px 4px rgb(0 0 0 / 10%);
   border-top-right-radius: 10px;
   border-bottom-right-radius: 10px;
@@ -67,39 +67,41 @@ input:focus {
   color: #fff;
   align-items: center;
   height: 52px;
-  transition: all 0.2s
+  transition: all 0.2s;
 }
-.room-list-item--active{
-  background-color: #3596FF
+.room-list-item--active {
+  background-color: #3596ff;
 }
 .room-list-item:hover {
-  background-color: #2682f6
+  background-color: #2682f6;
 }
-.room-list-header{
+.room-list-header {
   margin: 0 0 0 10px;
 }
-.room-list-header h4, .room-list-header p {
+.room-list-header h4,
+.room-list-header p {
   margin: 0;
 }
-.room-list-last{
+.room-list-last {
   color: rgba(216, 216, 216, 0.97);
 }
-.room-list-title, .room-list-last{
+.room-list-title,
+.room-list-last {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   width: 173px;
 }
-.rooms-search-input{
+.rooms-search-input {
   width: 100%;
   height: 30px;
   border: none;
-  background-color: #3596FF;
+  background-color: #3596ff;
   color: #fff;
   padding: 0 5px;
   border-radius: 5px;
 }
-.rooms-search-input::placeholder{
+.rooms-search-input::placeholder {
   color: #fff;
 }
 
@@ -107,13 +109,13 @@ input:focus {
   display: grid;
   grid-template-rows: 1fr 9fr auto;
 }
-.rooms-message-input{
+.rooms-message-input {
   background-color: transparent;
   color: #000;
   border: 1px solid #afafaf;
 }
 
-.rooms-message-input::placeholder{
+.rooms-message-input::placeholder {
   color: rgba(0, 0, 0, 0.41);
 }
 .message-item-inner {
@@ -131,105 +133,105 @@ input:focus {
   flex-shrink: 0;
   margin-right: 10px;
 }
-.flex-end{
+.flex-end {
   justify-content: flex-end;
 }
 .message-item {
   margin-left: 5px;
   margin-right: 55px;
-  background-color: #EAEAEA;
+  background-color: #eaeaea;
   padding: 10px 30px 10px 10px;
   border-radius: 10px;
 }
-.message-search{
+.message-search {
   display: flex;
   justify-content: center;
   align-items: center;
   box-shadow: 0 0 4px rgb(0 0 0 / 12%), 0 4px 4px rgb(0 0 0 / 5%);
   border-top-right-radius: 10px;
 }
-.rooms-list-inner{
+.rooms-list-inner {
   position: relative;
-  background: #007AFF;
+  background: #007aff;
   border-top-left-radius: 10px;
   border-bottom-left-radius: 10px;
   display: grid;
   grid-template-rows: 1fr auto;
 }
-.message-search{
+.message-search {
   padding: 0 10px;
 }
-.search-cancel{
+.search-cancel {
   border-radius: 5px;
   padding: 10px;
-  background-color: #EAEAEA;
+  background-color: #eaeaea;
 }
-.search{
+.search {
   border-radius: 5px;
   margin: 0 10px;
   padding: 10px;
   color: #fff;
-  background-color: #007AFF;
+  background-color: #007aff;
 }
-.message-search-inner{
+.message-search-inner {
   display: flex;
   align-items: center;
 }
-.message-search-actions{
+.message-search-actions {
   display: flex;
   align-items: center;
 }
 .message-search-input {
   height: 30px;
-  background-color: #EAEAEA;
+  background-color: #eaeaea;
   border: none;
   border-radius: 5px;
   padding: 0 5px;
   width: 250px;
 }
-.search-date{
+.search-date {
   padding: 0;
   margin-left: 10px;
 }
-.send-message{
+.send-message {
   border: none;
   background-color: transparent;
   cursor: pointer;
   padding: 5px;
 }
-.message-create{
+.message-create {
   box-shadow: 0 0 4px rgb(0 0 0 / 12%), 0 -5px 4px rgb(0 0 0 / 5%);
   display: flex;
   position: relative;
   padding: 5px;
   align-items: center;
   border-bottom-right-radius: 10px;
-  background-color: #EAEAEA;
+  background-color: #eaeaea;
 }
-.my-message-item-inner{
+.my-message-item-inner {
   justify-content: end;
   margin: 0 0 0 66px;
 }
-.messages-hover{
+.messages-hover {
   margin: 0;
 }
-.my-message-item{
-  background-color: #007AFF;
+.my-message-item {
+  background-color: #007aff;
   color: #fff;
   margin: 0 10px 0 0;
   padding: 10px 10px 10px 35px;
 }
-.emoji-dialog{
+.emoji-dialog {
   background-color: #3596ff36;
   border-radius: 10px;
   padding: 5px;
 }
-.messages_wrapper{
+.messages_wrapper {
   display: grid;
   overflow-y: auto;
   max-height: 450px;
 }
-.message-date{
+.message-date {
   position: absolute;
   bottom: 5px;
   font-size: 10px;
@@ -248,17 +250,17 @@ input:focus {
   padding: 5px;
   align-items: center;
   border-bottom-right-radius: 10px;
-  background-color: #EAEAEA;
+  background-color: #eaeaea;
 }
-.message-edit-cancel{
+.message-edit-cancel {
   display: flex;
   justify-content: space-between;
   width: 100%;
 }
-.message-edit-cancel h6{
+.message-edit-cancel h6 {
   margin: 0;
 }
-.message-edit-input{
+.message-edit-input {
   display: flex;
   align-items: center;
   width: 100%;
