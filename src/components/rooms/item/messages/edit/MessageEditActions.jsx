@@ -21,20 +21,39 @@ export default function MessageEditActions({
         onClick={() => setEmojiDialog((emojiDialog) => !emojiDialog)}
         className={`send-message ${emojiDialog ? 'emoji-dialog' : ''}`}
       >
-        <img width={25} height={25} src={smile} alt={'Emoji'} />
+        <img
+          width={25}
+          height={25}
+          src={smile}
+          alt={'Emoji'} 
+        />
       </button>
       {emojiDialog && (
-        <Picker preload disableSearchBar onEmojiClick={onEmojiClick} />
+        <Picker
+          preload
+          disableSearchBar
+          onEmojiClick={onEmojiClick} 
+        />
       )}
       <button className={'send-message'}>
-        <img width={25} height={25} src={attachment} alt={'attachment'} />
+        <img
+          width={25}
+          height={25}
+          src={attachment}
+          alt={'attachment'} 
+        />
       </button>
       {updatingMessage.text.length !== 0 && (
         <button
           onClick={() => handleUpdateMessage(updatingMessage.uuid)}
           className={'send-message'}
         >
-          <img width={25} height={25} src={send} alt={'Send'} />
+          <img
+            width={25}
+            height={25}
+            src={send}
+            alt={'Send'} 
+          />
         </button>
       )}
       {updatingMessage.text.length === 0 && (
@@ -42,7 +61,12 @@ export default function MessageEditActions({
           onClick={() => handleDeleteMessage(updatingMessage.uuid)}
           className={'send-message'}
         >
-          <img width={25} height={25} src={bin} alt={'delete'} />
+          <img
+            width={25}
+            height={25}
+            src={bin}
+            alt={'delete'} 
+          />
         </button>
       )}
     </>

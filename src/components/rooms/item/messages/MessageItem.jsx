@@ -27,11 +27,19 @@ export default function MessageItem({
   };
 
   return (
-    <div onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+    <div
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+    >
       {message.sender_uuid !== myUuid && (
         <div className={'messages-wrapper'}>
           <div className={'message-item-inner'}>
-            <img height={25} width={25} src={avatar} alt={'avatar'} />
+            <img
+              height={25}
+              width={25}
+              src={avatar}
+              alt={'avatar'} 
+            />
             <div className={'message-item'}>
               {message.text}
               <span className={'message-date'}>{createdAt}</span>
@@ -44,10 +52,16 @@ export default function MessageItem({
           {isHover && (
             <div className={'messages-item-actions'}>
               <button onClick={() => handleUpdateMessage(message)}>
-                <img src={pen} alt={'pen'} />
+                <img
+                  src={pen}
+                  alt={'pen'} 
+                />
               </button>
               <button onClick={() => handleDeleteMessage(message.uuid)}>
-                <img src={bin} alt={'bin'} />
+                <img
+                  src={bin}
+                  alt={'bin'} 
+                />
               </button>
             </div>
           )}
@@ -59,7 +73,12 @@ export default function MessageItem({
               <span className={'message-date'}>{createdAt}</span>
               {message.text}
             </div>
-            <img height={25} width={25} src={avatar} alt={'avatar'} />
+            <img
+              height={25}
+              width={25}
+              src={avatar}
+              alt={'avatar'} 
+            />
           </div>
         </div>
       )}

@@ -7,7 +7,7 @@ import { fetchRooms } from '../../../store/Rooms';
 
 export default function RoomsList() {
   const [searchString, setSearchString] = useState('');
-  const rooms = useSelector(state => state.rooms.roomsList)
+  const rooms = useSelector(state => state.rooms.roomsList);
   const dispatch = useDispatch();
 
   useEffect(() => {

@@ -4,7 +4,10 @@ import { forwardRef } from 'react';
 export const MessagesList = forwardRef(
   ({ myUuid, messages, handleDeleteMessage, handleUpdateMessage }, ref) => {
     return (
-      <div ref={ref} className={'messages_wrapper'}>
+      <div
+        ref={ref}
+        className={'messages_wrapper'}
+      >
         <div className={'messages'}>
           {messages.length !== 0 &&
             messages.map((message) => (

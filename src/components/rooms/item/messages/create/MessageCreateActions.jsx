@@ -20,16 +20,38 @@ export default function MessageCreateActions({
         onClick={() => setEmojiDialog((emojiDialog) => !emojiDialog)}
         className={`send-message ${emojiDialog ? 'emoji-dialog' : ''}`}
       >
-        <img width={25} height={25} src={smile} alt={'Emoji'} />
+        <img
+          width={25}
+          height={25}
+          src={smile}
+          alt={'Emoji'} 
+        />
       </button>
       {emojiDialog && (
-        <Picker preload disableSearchBar onEmojiClick={onEmojiClick} />
+        <Picker
+          preload
+          disableSearchBar
+          onEmojiClick={onEmojiClick} 
+        />
       )}
       <button className={'send-message'}>
-        <img width={25} height={25} src={attachment} alt={'attachment'} />
+        <img
+          width={25}
+          height={25}
+          src={attachment}
+          alt={'attachment'} 
+        />
       </button>
-      <button onClick={() => handleSubmitMessage()} className={'send-message'}>
-        <img width={25} height={25} src={send} alt={'Send'} />
+      <button
+        onClick={() => handleSubmitMessage()}
+        className={'send-message'}
+      >
+        <img
+          width={25}
+          height={25}
+          src={send}
+          alt={'Send'} 
+        />
       </button>
     </>
   );

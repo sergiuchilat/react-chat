@@ -18,7 +18,10 @@ export const MessageEdit = forwardRef(
       <div className={'message-edit'}>
         <div className={'message-edit-input'}>
           <button onClick={handleCancelUpdate}>
-            <img src={cancel} alt={'cancel'} />
+            <img
+              src={cancel}
+              alt={'cancel'} 
+            />
           </button>
           <input
             ref={ref}
@@ -26,8 +29,7 @@ export const MessageEdit = forwardRef(
             value={updatingMessage.text}
             onChange={(e) => handleChangeUpdatingMessage(e.target.value)}
             onKeyDown={(e) =>
-              e.key === 'Enter' && handleUpdateMessage(updatingMessage.uuid)
-            }
+              e.key === 'Enter' && handleUpdateMessage(updatingMessage.uuid)}
             className={'rooms-search-input rooms-message-input'}
             type={'text'}
           />

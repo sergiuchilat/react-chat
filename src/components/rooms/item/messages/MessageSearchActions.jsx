@@ -7,12 +7,23 @@ export default function MessageSearchActions({
   return (
     <div className={'message-search-actions'}>
       <button className={'search-date'}>
-        <img width={20} height={20} src={calendar} alt={'calendar'} />
+        <img
+          width={20}
+          height={20}
+          src={calendar}
+          alt={'calendar'} 
+        />
       </button>
-      <button onClick={() => handleSearch()} className={'search'}>
+      <button
+        onClick={() => handleSearch()}
+        className={'search'}
+      >
         Search
       </button>
-      <button className={'search-cancel'} onClick={() => handleCloseSearch()}>
+      <button
+        className={'search-cancel'}
+        onClick={() => handleCloseSearch()}
+      >
         Cancel
       </button>
     </div>

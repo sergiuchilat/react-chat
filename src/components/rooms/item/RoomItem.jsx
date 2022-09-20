@@ -23,7 +23,7 @@ export default function RoomItem() {
   const messagesList = useRef();
   const createInput = useRef();
   const editInput = useRef();
-  const roomUuid = useSelector(state => state.rooms.selectedRoom)
+  const roomUuid = useSelector(state => state.rooms.selectedRoom);
   const fetchRoomMessages = async () => {
     try {
       const response = await new RoomsApi().getMessages(roomUuid);
@@ -189,13 +189,13 @@ export default function RoomItem() {
   useEffect(() => {
     fetchRoomItem();
     setUpdatingMessage({});
-    const socketUrl = `ws://157.230.122.163:8108/ws/rooms/${roomUuid}/messages`
+    const socketUrl = `ws://157.230.122.163:8108/ws/rooms/${roomUuid}/messages`;
     console.log(socketUrl, 'socket url');
     if (roomUuid) {
       const socket = new WebSocket(socketUrl);
       socket.onmessage = (event) => {
         console.log(event);
-      }
+      };
       // socket.on('connect', () => {
       //   console.log('connected');
       // });
@@ -215,7 +215,10 @@ export default function RoomItem() {
       {room.name && (
         <>
           {!searchMessageMode && (
-            <RoomName name={room.name} handlerSearch={handlerSearchMode} />
+            <RoomName
+              name={room.name}
+              handlerSearch={handlerSearchMode} 
+            />
           )}
           {searchMessageMode && (
             <MessageSearch
