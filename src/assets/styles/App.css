@@ -16,6 +16,7 @@ input:focus {
   grid-template-columns: 2fr 5fr;
   margin: 0 auto;
   width: 800px;
+  position: relative;
 }
 
 #wrapper .rooms-list {
@@ -267,4 +268,24 @@ input:focus {
 }
 .message-edit-input input {
   border: 1px solid #afafaf;
+}
+.room-name-title{
+  width: 500px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.alert-dialog{
+  position: absolute;
+  padding: 15px;
+  left: 50%;
+  box-shadow: 0 0 10px rgb(0 0 0 / 40%);
+  top: 50%;
+  border-radius: 10px;
+  transform: translate(-50%, -50%);
+  background-color: #fff;
+}
+.alert-actions{
+  display: flex;
+  justify-content: space-between;
 }

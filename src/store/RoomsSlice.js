@@ -5,7 +5,7 @@ export const fetchRooms = createAsyncThunk(
   'rooms/fetchRooms',
   async function(_, { rejectWithValue }) {
     try {
-      const response = await (new RoomsApi()).getRoomsList();
+      const response = await (new RoomsApi()).getList();
       if(response.data) {
         return response.data;
       }

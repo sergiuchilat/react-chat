@@ -23,13 +23,13 @@ export default class RoomsApi extends ApiModel {
     });
   }
 
-  async getRoomsList() {
+  async getList() {
     return await this.http.get(`${this.resourceUrl}/`);
   }
-  async getRoom(roomUuid) {
+  async getItem(roomUuid) {
     return await this.http.get(`${this.resourceUrl}/${roomUuid}/`);
   }
-  async createRoom(payload) {
+  async create(payload) {
     return await this.http.post(`${this.resourceUrl}/`, payload);
   }
   async addMember(roomId, payload) {
@@ -44,7 +44,7 @@ export default class RoomsApi extends ApiModel {
   async getMembers(roomUuid) {
     return await this.http.get(`${this.resourceUrl}/${roomUuid}/members/`);
   }
-  async delRoom(roomUuid, payload) {
+  async delete(roomUuid, payload) {
     return await this.http.delete(`${this.resourceUrl}/${roomUuid}/`, payload);
   }
 }

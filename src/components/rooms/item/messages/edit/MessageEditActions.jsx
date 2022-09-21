@@ -6,33 +6,33 @@ import bin from '../../../../../assets/img/icons/rubbish-bin.png';
 import Picker from 'emoji-picker-react';
 export default function MessageEditActions({
   handleUpdateMessage,
-  setEmoji,
+  selectEmoji,
   updatingMessage,
   handleDeleteMessage,
 }) {
-  const [emojiDialog, setEmojiDialog] = useState(false);
+  const [emojiDialogVisible, setEmojiDialogVisible] = useState(false);
 
   const onEmojiClick = (event, emojiObject) => {
-    setEmoji(emojiObject.emoji);
+    selectEmoji(emojiObject.emoji);
   };
   return (
     <>
       <button
-        onClick={() => setEmojiDialog((emojiDialog) => !emojiDialog)}
-        className={`send-message ${emojiDialog ? 'emoji-dialog' : ''}`}
+        onClick={() => setEmojiDialogVisible((emojiDialog) => !emojiDialog)}
+        className={`send-message ${emojiDialogVisible ? 'emoji-dialog' : ''}`}
       >
         <img
           width={25}
           height={25}
           src={smile}
-          alt={'Emoji'} 
+          alt={'Emoji'}
         />
       </button>
-      {emojiDialog && (
+      {emojiDialogVisible && (
         <Picker
           preload
           disableSearchBar
-          onEmojiClick={onEmojiClick} 
+          onEmojiClick={onEmojiClick}
         />
       )}
       <button className={'send-message'}>
@@ -40,7 +40,7 @@ export default function MessageEditActions({
           width={25}
           height={25}
           src={attachment}
-          alt={'attachment'} 
+          alt={'attachment'}
         />
       </button>
       {updatingMessage.text.length !== 0 && (
@@ -52,7 +52,7 @@ export default function MessageEditActions({
             width={25}
             height={25}
             src={send}
-            alt={'Send'} 
+            alt={'Send'}
           />
         </button>
       )}
@@ -65,7 +65,7 @@ export default function MessageEditActions({
             width={25}
             height={25}
             src={bin}
-            alt={'delete'} 
+            alt={'delete'}
           />
         </button>
       )}

@@ -3,7 +3,7 @@ import search from '../../../assets/img/icons/loupe.png';
 export default function RoomName({ name, handlerSearch }) {
   return (
     <div className={'room-name'}>
-      <div>{name}</div>
+      <div className={'room-name-title'}>{name}</div>
       <button
         className={'room-search-btn'}
         onClick={() => handlerSearch()}
@@ -12,7 +12,7 @@ export default function RoomName({ name, handlerSearch }) {
           width={25}
           height={25}
           src={search}
-          alt={'search'} 
+          alt={'search'}
         />
       </button>
     </div>

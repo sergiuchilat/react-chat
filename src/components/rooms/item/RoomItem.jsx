@@ -1,29 +1,34 @@
 import RoomName from './RoomName';
 import MessageSearch from './messages/MessageSearch';
 import { MessagesList } from './messages/MessagesList';
-import { MessageCreate } from './messages/create/MessageCreate';
+import { MessageCreate } from './messages/MessageCreate';
 import { useEffect, useState, useCallback, useRef } from 'react';
 import RoomsApi from '../../../services/api/modules/RoomsApi';
 import MessagesApi from '../../../services/api/modules/MessagesApi';
-import { MessageEdit } from './messages/edit/MessageEdit';
-import { useSelector } from 'react-redux';
+import { MessageEdit } from './messages/MessageEdit';
+import { useSelector, useDispatch } from 'react-redux';
+import { showAlert } from '../../../store/AlertDialogSlice';
+import AlertDialog from '../../dialogs/AlertDialog';
 
 
-export default function RoomItem() {
+export default function RoomItem({ userExternalUuid }) {
   const [room, setRoom] = useState({
     name: '',
   });
   const [messages, setMessages] = useState([]);
   const [messageSearch, setMessageSearch] = useState('');
   const [message, setMessage] = useState('');
-  const [myUuid, setMyUuid] = useState(null);
-  const [searchMessageMode, setSearchMessageMode] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [userUuid, setUserUuid] = useState(null);
+  const [searchMessageActive, setSearchMessageActive] = useState(false);
+  const [pending, setPending] = useState(false);
   const [updatingMessage, setUpdatingMessage] = useState({});
   const messagesList = useRef();
   const createInput = useRef();
   const editInput = useRef();
   const roomUuid = useSelector(state => state.rooms.selectedRoom);
+  const alert = useSelector((state) => state.alert);
+
+  const validate = (text) =>  text.length;
   const fetchRoomMessages = async () => {
     try {
       const response = await new RoomsApi().getMessages(roomUuid);
@@ -34,20 +39,18 @@ export default function RoomItem() {
       console.log(e);
     }
   };
-
   const fetchRoomItem = async () => {
     try {
       if (roomUuid) {
-        setLoading(true);
+        setPending(true);
+        await fetchRoom(roomUuid);
         await fetchRoomMessages();
         const members = await fetchRoomMembers();
-        await fetchRoom(roomUuid);
-        if (members.data) {
-          setMyUuid(
-            members.data.find(
+        if (members) {
+          setUserUuid(
+            members.find(
               (item) =>
-                item.external_user_uuid ===
-                'c54cf8e0-34cd-11ed-a261-0242ac120002'
+                item.external_user_uuid === userExternalUuid
             ).uuid
           );
         }
@@ -55,13 +58,13 @@ export default function RoomItem() {
     } catch (e) {
       console.log(e);
     } finally {
-      setLoading(false);
-      handleScrollToBottom();
+      setPending(false);
+      scrollToBottom();
     }
   };
   const fetchRoom = async (roomUuid) => {
     try {
-      const response = await new RoomsApi().getRoom(roomUuid);
+      const response = await new RoomsApi().getItem(roomUuid);
       if (response.data) {
         setRoom({ name: response.data.name });
       }
@@ -69,7 +72,7 @@ export default function RoomItem() {
       console.log(e);
     }
   };
-  const handleScrollToBottom = (timeout = 400) => {
+  const scrollToBottom = (timeout = 400) => {
     setTimeout(() => {
       if (messagesList.current) {
         messagesList.current.scroll({
@@ -83,22 +86,23 @@ export default function RoomItem() {
     try {
       const response = await new RoomsApi().getMembers(roomUuid);
       if (response.data) {
-        return response;
+        return response.data;
       }
     } catch (e) {
       console.log(e);
     }
   };
-
-  const handleSubmitMessage = async () => {
+  const handleSubmitMessage = async (attachments) => {
     try {
-      if (message.trim().length) {
-        const response = await new MessagesApi().createMessage({
+      if (validate(message)) {
+        const finalMessage = {
           text: message,
           room_uuid: roomUuid,
-          sender_uuid: myUuid,
-        });
-        handleScrollToBottom();
+          sender_uuid: userUuid,
+          attachments: attachments || [],
+        };
+        const response = await new MessagesApi().createMessage({ ...finalMessage });
+        scrollToBottom();
         if (response) {
           await fetchRoomMessages();
         }
@@ -108,20 +112,20 @@ export default function RoomItem() {
       console.log(e);
     }
   };
-
+  const dispatch = useDispatch();
   const handleChangeMessage = (message) => {
     setMessage(message);
   };
 
-  const clearSearchMessage = useCallback(() => {
+  const clearSearchMessage = () => {
     setMessageSearch('');
-  }, []);
-
-  const handlerSearchMode = async () => {
-    clearSearchMessage();
-    setSearchMessageMode((searchMessageMode) => !searchMessageMode);
   };
-  const handleChangeSearch = (value) => {
+
+  const toggleSearchActive = async () => {
+    clearSearchMessage();
+    setSearchMessageActive((searchMessageActive) => !searchMessageActive);
+  };
+  const handleSearchInput = (value) => {
     setMessageSearch(value);
   };
   const handleSetEmoji = (emoji) => {
@@ -142,70 +146,83 @@ export default function RoomItem() {
   const handleSearch = async () => {
     await fetchRoomMessages();
   };
-  const handleDeleteMessage = async (messageUuid) => {
+  const handleDeleteMessageAlert = async (messageUuid) => {
     try {
-      const conf = confirm('Are you sure?');
-      if (conf) {
-        const response = await new MessagesApi().deleteMessage(messageUuid);
-        if (response.status === 204) {
-          await fetchRoomMessages();
-        }
-        if (Object.keys(updatingMessage).length !== 0) {
-          setUpdatingMessage({});
-        }
-      }
-    } catch (e) {
-      console.log(e);
-    }
-  };
-  const handleSetUpdatingMessage = (message) => {
-    setUpdatingMessage(message);
-  };
-  const handleUpdateMessage = async (messageUuid) => {
-    try {
-      if (updatingMessage.text.length) {
-        const response = await new MessagesApi().updateMessage(messageUuid, {
-          text: updatingMessage.text,
-          sender_uuid: updatingMessage.sender_uuid,
-          room_uuid: updatingMessage.room_uuid,
-        });
-        setUpdatingMessage({});
-        if (response.data) {
-          await fetchRoomMessages();
-        }
-      } else {
+      const confirm = {
+        title: 'Delete a message',
+        message: 'Are you sure?',
+      };
+      dispatch(showAlert({ ...confirm }));
+      console.log(alert.answer);
+
+      if(alert.answer) {
         await handleDeleteMessage(messageUuid);
       }
     } catch (e) {
       console.log(e);
     }
   };
-  const handleCancelUpdate = () => {
+  const handleDeleteMessage = async (messageUuid) => {
+    try {
+      const response = await new MessagesApi().deleteMessage(messageUuid);
+      if (response.status === 204) {
+        await fetchRoomMessages();
+      }
+      if (Object.keys(updatingMessage).length !== 0) {
+        setUpdatingMessage({});
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
+  const handleFinishUpdatingMessage = (message) => {
+    setUpdatingMessage(message);
+  };
+  const handleUpdateMessage = async (messageUuid) => {
+    try {
+      if (validate(updatingMessage.text)) {
+        if(!updatingMessage.parent_uuid){
+          delete updatingMessage.parent_uuid;
+        }
+        const response = await new MessagesApi().updateMessage(messageUuid, { ...updatingMessage });
+        setUpdatingMessage({});
+        if (response.data) {
+          await fetchRoomMessages();
+        }
+      } else {
+        await handleDeleteMessageAlert(messageUuid);
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
+  const handleCancelUpdateMessage = () => {
     setUpdatingMessage({});
   };
   const handleChangeUpdatingMessage = (message) => {
     setUpdatingMessage({ ...updatingMessage, text: message });
   };
+
   useEffect(() => {
     fetchRoomItem();
     setUpdatingMessage({});
-    const socketUrl = `ws://157.230.122.163:8108/ws/rooms/${roomUuid}/messages`;
-    console.log(socketUrl, 'socket url');
-    if (roomUuid) {
-      const socket = new WebSocket(socketUrl);
-      socket.onmessage = (event) => {
-        console.log(event);
-      };
-      // socket.on('connect', () => {
-      //   console.log('connected');
-      // });
-      // socket.on('disconnect', () => {
-      //   console.log('disconnect');
-      // });
-      // socket.on('addMessage', (payload) => {
-      //   console.log(payload, 'payload');
-      // });
-    }
+    // const socketUrl = `ws://157.230.122.163:8108/ws/rooms/${roomUuid}/messages`;
+    // console.log(socketUrl, 'socket url');
+    // if (roomUuid) {
+    //   const socket = new WebSocket(socketUrl);
+    //   socket.onmessage = (event) => {
+    //     console.log(event);
+    //   };
+    //   socket.on('connect', () => {
+    //     console.log('connected');
+    //   });
+    //   socket.on('disconnect', () => {
+    //     console.log('disconnect');
+    //   });
+    //   socket.on('addMessage', (payload) => {
+    //     console.log(payload, 'payload');
+    //   });
+    // }
 
     // fetchRoomMessages();
   }, [roomUuid]);
@@ -214,27 +231,27 @@ export default function RoomItem() {
     <div className={`${room.name && 'rooms-item'} room`}>
       {room.name && (
         <>
-          {!searchMessageMode && (
+          {!searchMessageActive && (
             <RoomName
               name={room.name}
-              handlerSearch={handlerSearchMode} 
+              handlerSearch={toggleSearchActive}
             />
           )}
-          {searchMessageMode && (
+          {searchMessageActive && (
             <MessageSearch
-              handleCloseSearch={handlerSearchMode}
-              handleChangeSearch={handleChangeSearch}
+              handleCloseSearch={toggleSearchActive}
+              handleSearchInput={handleSearchInput}
               handleSearch={handleSearch}
             />
           )}
-          {loading && <div style={{ textAlign: 'center' }}>Loading...</div>}
-          {!loading && (
+          {pending && <div style={{ textAlign: 'center' }}>pending...</div>}
+          {!pending && (
             <MessagesList
               ref={messagesList}
-              myUuid={myUuid}
+              userUuid={userUuid}
               messages={messages}
-              handleDeleteMessage={handleDeleteMessage}
-              handleUpdateMessage={handleSetUpdatingMessage}
+              handleDeleteMessage={handleDeleteMessageAlert}
+              handleUpdateMessage={handleFinishUpdatingMessage}
             />
           )}
           {Object.keys(updatingMessage).length !== 0 && (
@@ -242,9 +259,9 @@ export default function RoomItem() {
               updatingMessage={updatingMessage}
               handleUpdateMessage={handleUpdateMessage}
               handleChangeUpdatingMessage={handleChangeUpdatingMessage}
-              handleDeleteMessage={handleDeleteMessage}
-              handleCancelUpdate={handleCancelUpdate}
-              setEmoji={handleSetEmoji}
+              handleDeleteMessage={handleDeleteMessageAlert}
+              handleCancelUpdateMessage={handleCancelUpdateMessage}
+              selectEmoji={handleSetEmoji}
               ref={editInput}
             />
           )}
@@ -253,13 +270,17 @@ export default function RoomItem() {
               message={message}
               handleChangeMessage={handleChangeMessage}
               handleSubmitMessage={handleSubmitMessage}
-              setEmoji={handleSetEmoji}
+              selectEmoji={handleSetEmoji}
+              handleUpdateMessage={handleUpdateMessage}
+              updatingMessage={updatingMessage}
+              handleDeleteMessage={handleDeleteMessageAlert}
               ref={createInput}
             />
           )}
         </>
       )}
       {!room.name && <h1 className={'room-text'}>Choose a room</h1>}
+      {alert.showed &&<AlertDialog />}
     </div>
   );
 }

@@ -1,6 +1,6 @@
-import MessageEditActions from './MessageEditActions';
+import MessageActions from './MessageActions';
 import { forwardRef } from 'react';
-import cancel from '../../../../../assets/img/icons/cancel.png';
+import cancel from '../../../../assets/img/icons/cancel.png';
 
 export const MessageEdit = forwardRef(
   (
@@ -9,18 +9,18 @@ export const MessageEdit = forwardRef(
       handleUpdateMessage,
       handleChangeUpdatingMessage,
       handleDeleteMessage,
-      handleCancelUpdate,
-      setEmoji,
+      handleCancelUpdateMessage,
+      selectEmoji,
     },
     ref
   ) => {
     return (
       <div className={'message-edit'}>
         <div className={'message-edit-input'}>
-          <button onClick={handleCancelUpdate}>
+          <button onClick={handleCancelUpdateMessage}>
             <img
               src={cancel}
-              alt={'cancel'} 
+              alt={'cancel'}
             />
           </button>
           <input
@@ -33,9 +33,9 @@ export const MessageEdit = forwardRef(
             className={'rooms-search-input rooms-message-input'}
             type={'text'}
           />
-          <MessageEditActions
+          <MessageActions
             handleUpdateMessage={handleUpdateMessage}
-            setEmoji={setEmoji}
+            selectEmoji={selectEmoji}
             updatingMessage={updatingMessage}
             handleDeleteMessage={handleDeleteMessage}
           />

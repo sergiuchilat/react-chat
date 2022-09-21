@@ -3,7 +3,7 @@ import MessageSearchActions from './MessageSearchActions';
 
 export default function MessageSearch({
   handleCloseSearch,
-  handleChangeSearch,
+  handleSearchInput,
   handleSearch,
 }) {
   return (
@@ -17,7 +17,7 @@ export default function MessageSearch({
           style={{ marginRight: 10 }}
         />
         <input
-          onChange={(e) => handleChangeSearch(e.target.value)}
+          onChange={(e) => handleSearchInput(e.target.value)}
           placeholder={'Search Message'}
           className={'message-search-input'}
           type={'text'}

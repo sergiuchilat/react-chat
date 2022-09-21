@@ -1,8 +1,15 @@
-import MessageCreateActions from './MessageCreateActions';
+import MessageActions from './MessageActions';
 import { forwardRef } from 'react';
 
 export const MessageCreate = forwardRef(
-  ({ message, handleChangeMessage, handleSubmitMessage, setEmoji }, ref) => {
+  ({
+    message,
+    handleChangeMessage,
+    handleSubmitMessage,
+    selectEmoji,
+    handleUpdateMessage,
+    updatingMessage,
+    handleDeleteMessage }, ref) => {
     return (
       <div className={'message-create'}>
         <input
@@ -14,9 +21,12 @@ export const MessageCreate = forwardRef(
           className={'rooms-search-input rooms-message-input'}
           type={'text'}
         />
-        <MessageCreateActions
+        <MessageActions
+          handleUpdateMessage={handleUpdateMessage}
+          selectEmoji={selectEmoji}
+          updatingMessage={updatingMessage}
+          handleDeleteMessage={handleDeleteMessage}
           handleSubmitMessage={handleSubmitMessage}
-          setEmoji={setEmoji}
         />
       </div>
     );

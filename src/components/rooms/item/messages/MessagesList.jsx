@@ -2,7 +2,7 @@ import MessageItem from './MessageItem';
 import { forwardRef } from 'react';
 
 export const MessagesList = forwardRef(
-  ({ myUuid, messages, handleDeleteMessage, handleUpdateMessage }, ref) => {
+  ({ userUuid, messages, handleDeleteMessage, handleUpdateMessage }, ref) => {
     return (
       <div
         ref={ref}
@@ -12,7 +12,7 @@ export const MessagesList = forwardRef(
           {messages.length !== 0 &&
             messages.map((message) => (
               <MessageItem
-                myUuid={myUuid}
+                userUuid={userUuid}
                 message={message}
                 handleDeleteMessage={handleDeleteMessage}
                 handleUpdateMessage={handleUpdateMessage}

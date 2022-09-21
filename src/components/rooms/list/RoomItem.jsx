@@ -1,6 +1,6 @@
 import avatar from './../../../assets/img/icons/avatar.png';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectRoom } from '../../../store/Rooms';
+import { selectRoom } from '../../../store/RoomsSlice';
 
 export default function RoomItem({ room }) {
   const dispatch = useDispatch();
@@ -22,7 +22,7 @@ export default function RoomItem({ room }) {
         width={30}
         height={30}
         src={avatar}
-        alt={'avatar'} 
+        alt={'avatar'}
       />
       <div className={'room-list-header'}>
         <h4 className={'room-list-title'}>{room.name}</h4>

@@ -3,7 +3,7 @@ import RoomSearch from './RoomSearch';
 import { useEffect, useState } from 'react';
 import RoomsApi from 'services/api/modules/RoomsApi';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchRooms } from '../../../store/Rooms';
+import { fetchRooms } from '../../../store/RoomsSlice';
 
 export default function RoomsList() {
   const [searchString, setSearchString] = useState('');

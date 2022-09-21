@@ -2,9 +2,10 @@ import avatar from '../../../../assets/img/icons/avatar.png';
 import pen from '../../../../assets/img/icons/pen.png';
 import bin from '../../../../assets/img/icons/rubbish-bin.png';
 import { useState } from 'react';
+import Moment from 'react-moment';
 
 export default function MessageItem({
-  myUuid,
+  userUuid,
   message,
   handleDeleteMessage,
   handleUpdateMessage,
@@ -13,15 +14,7 @@ export default function MessageItem({
   const handleMouseEnter = () => {
     setIsHover(true);
   };
-  const padTo2Digits = (num) => {
-    return num.toLocaleString().padStart(2, '0');
-  };
-  const formatDate = (date) => {
-    return `${padTo2Digits(date.getHours())}:${padTo2Digits(
-      date.getMinutes()
-    )} `;
-  };
-  const createdAt = formatDate(new Date(Number(message.created_at)));
+  const createdAt = new Date(Number(`${message.created_at}000`));
   const handleMouseLeave = () => {
     setIsHover(false);
   };
@@ -31,36 +24,41 @@ export default function MessageItem({
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
-      {message.sender_uuid !== myUuid && (
+      {message.sender_uuid !== userUuid && (
         <div className={'messages-wrapper'}>
           <div className={'message-item-inner'}>
             <img
               height={25}
               width={25}
               src={avatar}
-              alt={'avatar'} 
+              alt={'avatar'}
             />
             <div className={'message-item'}>
               {message.text}
-              <span className={'message-date'}>{createdAt}</span>
+              <Moment
+                format={'HH:mm'}
+                className={'message-date'}
+              >
+                {createdAt}
+              </Moment>
             </div>
           </div>
         </div>
       )}
-      {message.sender_uuid === myUuid && (
+      {message.sender_uuid === userUuid && (
         <div className={`messages-wrapper ${!isHover ? 'flex-end' : ''}`}>
           {isHover && (
             <div className={'messages-item-actions'}>
               <button onClick={() => handleUpdateMessage(message)}>
                 <img
                   src={pen}
-                  alt={'pen'} 
+                  alt={'pen'}
                 />
               </button>
               <button onClick={() => handleDeleteMessage(message.uuid)}>
                 <img
                   src={bin}
-                  alt={'bin'} 
+                  alt={'bin'}
                 />
               </button>
             </div>
@@ -70,14 +68,19 @@ export default function MessageItem({
             ${isHover ? 'messages-hover' : ''}`}
           >
             <div className={'message-item my-message-item'}>
-              <span className={'message-date'}>{createdAt}</span>
+              <Moment
+                format={'HH:mm'}
+                className={'message-date'}
+              >
+                {createdAt}
+              </Moment>
               {message.text}
             </div>
             <img
               height={25}
               width={25}
               src={avatar}
-              alt={'avatar'} 
+              alt={'avatar'}
             />
           </div>
         </div>
