@@ -1,7 +1,6 @@
 import RoomItem from './RoomItem';
 import RoomSearch from './RoomSearch';
 import { useEffect, useState } from 'react';
-import RoomsApi from 'services/api/modules/RoomsApi';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchRooms } from '../../../store/RoomsSlice';
 
@@ -11,12 +10,12 @@ export default function RoomsList() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(fetchRooms());
-  }, [dispatch]);
+    dispatch(fetchRooms(searchString));
+  }, [dispatch, searchString]);
 
 
-  const onRoomSearch = (searchString) => {
-    setSearchString(searchString);
+  const onRoomSearch = async (search) => {
+    setSearchString(`?search=${search}`);
   };
 
   return (

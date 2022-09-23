@@ -3,9 +3,9 @@ import RoomsApi from '../services/api/modules/RoomsApi';
 
 export const fetchRooms = createAsyncThunk(
   'rooms/fetchRooms',
-  async function(_, { rejectWithValue }) {
+  async function(filter, { rejectWithValue }) {
     try {
-      const response = await (new RoomsApi()).getList();
+      const response = await (new RoomsApi()).getList(filter);
       if(response.data) {
         return response.data;
       }

@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { acceptAlert, cancelAlert } from '../../store/AlertDialogSlice';
 
-export default function AlertDialog() {
+export default function AlertDialog({ acceptDialog }) {
   const alert = useSelector((state) => state.alert);
   const dispatch = useDispatch();
 
@@ -11,12 +11,13 @@ export default function AlertDialog() {
 
   const handleAccept = () => {
     dispatch(acceptAlert());
+    acceptDialog();
   };
 
   return (
     <div
       className={'alert-dialog'}
-      style={{ maxWidth: alert.width }}
+      style={{ width: alert.width }}
     >
       <h3 id={'alert-dialog-title'}>
         {alert.title}
@@ -27,8 +28,14 @@ export default function AlertDialog() {
         </p>
       </div>
       <div className={'alert-actions'}>
-        <button onClick={handleClose}>Cancel</button>
         <button
+          className={'alert-cancel'}
+          onClick={handleClose}
+        >
+          Cancel
+        </button>
+        <button
+          className={'alert-accept'}
           onClick={handleAccept}
           autoFocus
         >

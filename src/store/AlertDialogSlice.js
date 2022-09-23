@@ -4,7 +4,7 @@ const initialState = {
   showed: false,
   title: '',
   message: '',
-  width: 'sm',
+  width: '300',
   answer: false,
 };
 

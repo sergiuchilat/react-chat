@@ -23,8 +23,8 @@ export default class RoomsApi extends ApiModel {
     });
   }
 
-  async getList() {
-    return await this.http.get(`${this.resourceUrl}/`);
+  async getList(filter) {
+    return await this.http.get(`${this.resourceUrl}/${filter}`);
   }
   async getItem(roomUuid) {
     return await this.http.get(`${this.resourceUrl}/${roomUuid}/`);

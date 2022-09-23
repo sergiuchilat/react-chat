@@ -2,14 +2,15 @@ import RoomName from './RoomName';
 import MessageSearch from './messages/MessageSearch';
 import { MessagesList } from './messages/MessagesList';
 import { MessageCreate } from './messages/MessageCreate';
-import { useEffect, useState, useCallback, useRef } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import RoomsApi from '../../../services/api/modules/RoomsApi';
 import MessagesApi from '../../../services/api/modules/MessagesApi';
 import { MessageEdit } from './messages/MessageEdit';
 import { useSelector, useDispatch } from 'react-redux';
 import { showAlert } from '../../../store/AlertDialogSlice';
 import AlertDialog from '../../dialogs/AlertDialog';
-
+import SnackBar from '../../dialogs/SnackBar';
+import { showSnackbar } from '../../../store/SnackBarSlice';
 
 export default function RoomItem({ userExternalUuid }) {
   const [room, setRoom] = useState({
@@ -22,11 +23,14 @@ export default function RoomItem({ userExternalUuid }) {
   const [searchMessageActive, setSearchMessageActive] = useState(false);
   const [pending, setPending] = useState(false);
   const [updatingMessage, setUpdatingMessage] = useState({});
+  const [selectedMessage, setSelectedMessage] = useState(null);
   const messagesList = useRef();
   const createInput = useRef();
   const editInput = useRef();
   const roomUuid = useSelector(state => state.rooms.selectedRoom);
   const alert = useSelector((state) => state.alert);
+  const snackBar = useSelector((state) => state.snackBar);
+  const dispatch = useDispatch();
 
   const validate = (text) =>  text.length;
   const fetchRoomMessages = async () => {
@@ -36,7 +40,7 @@ export default function RoomItem({ userExternalUuid }) {
         setMessages(response.data);
       }
     } catch (e) {
-      console.log(e);
+      dispatch(showSnackbar({ message: e.message }));
     }
   };
   const fetchRoomItem = async () => {
@@ -112,7 +116,6 @@ export default function RoomItem({ userExternalUuid }) {
       console.log(e);
     }
   };
-  const dispatch = useDispatch();
   const handleChangeMessage = (message) => {
     setMessage(message);
   };
@@ -153,11 +156,7 @@ export default function RoomItem({ userExternalUuid }) {
         message: 'Are you sure?',
       };
       dispatch(showAlert({ ...confirm }));
-      console.log(alert.answer);
-
-      if(alert.answer) {
-        await handleDeleteMessage(messageUuid);
-      }
+      setSelectedMessage(messageUuid);
     } catch (e) {
       console.log(e);
     }
@@ -202,7 +201,10 @@ export default function RoomItem({ userExternalUuid }) {
   const handleChangeUpdatingMessage = (message) => {
     setUpdatingMessage({ ...updatingMessage, text: message });
   };
-
+  const acceptDialog = async () => {
+    await handleDeleteMessage(selectedMessage);
+    setSelectedMessage(null);
+  };
   useEffect(() => {
     fetchRoomItem();
     setUpdatingMessage({});
@@ -229,58 +231,61 @@ export default function RoomItem({ userExternalUuid }) {
 
   return (
     <div className={`${room.name && 'rooms-item'} room`}>
-      {room.name && (
-        <>
-          {!searchMessageActive && (
-            <RoomName
-              name={room.name}
-              handlerSearch={toggleSearchActive}
-            />
-          )}
-          {searchMessageActive && (
-            <MessageSearch
-              handleCloseSearch={toggleSearchActive}
-              handleSearchInput={handleSearchInput}
-              handleSearch={handleSearch}
-            />
-          )}
-          {pending && <div style={{ textAlign: 'center' }}>pending...</div>}
-          {!pending && (
-            <MessagesList
-              ref={messagesList}
-              userUuid={userUuid}
-              messages={messages}
-              handleDeleteMessage={handleDeleteMessageAlert}
-              handleUpdateMessage={handleFinishUpdatingMessage}
-            />
-          )}
-          {Object.keys(updatingMessage).length !== 0 && (
-            <MessageEdit
-              updatingMessage={updatingMessage}
-              handleUpdateMessage={handleUpdateMessage}
-              handleChangeUpdatingMessage={handleChangeUpdatingMessage}
-              handleDeleteMessage={handleDeleteMessageAlert}
-              handleCancelUpdateMessage={handleCancelUpdateMessage}
-              selectEmoji={handleSetEmoji}
-              ref={editInput}
-            />
-          )}
-          {Object.keys(updatingMessage).length === 0 && (
-            <MessageCreate
-              message={message}
-              handleChangeMessage={handleChangeMessage}
-              handleSubmitMessage={handleSubmitMessage}
-              selectEmoji={handleSetEmoji}
-              handleUpdateMessage={handleUpdateMessage}
-              updatingMessage={updatingMessage}
-              handleDeleteMessage={handleDeleteMessageAlert}
-              ref={createInput}
-            />
-          )}
-        </>
-      )}
-      {!room.name && <h1 className={'room-text'}>Choose a room</h1>}
-      {alert.showed &&<AlertDialog />}
+      {!snackBar.showed && <>
+        {room.name && (
+          <>
+            {!searchMessageActive && (
+              <RoomName
+                name={room.name}
+                handlerSearch={toggleSearchActive}
+              />
+            )}
+            {searchMessageActive && (
+              <MessageSearch
+                handleCloseSearch={toggleSearchActive}
+                handleSearchInput={handleSearchInput}
+                handleSearch={handleSearch}
+              />
+            )}
+            {pending && <div style={{ textAlign: 'center' }}>pending...</div>}
+            {!pending && (
+              <MessagesList
+                ref={messagesList}
+                userUuid={userUuid}
+                messages={messages}
+                handleDeleteMessage={handleDeleteMessageAlert}
+                handleUpdateMessage={handleFinishUpdatingMessage}
+              />
+            )}
+            {Object.keys(updatingMessage).length !== 0 && (
+              <MessageEdit
+                updatingMessage={updatingMessage}
+                handleUpdateMessage={handleUpdateMessage}
+                handleChangeUpdatingMessage={handleChangeUpdatingMessage}
+                handleDeleteMessage={handleDeleteMessageAlert}
+                handleCancelUpdateMessage={handleCancelUpdateMessage}
+                selectEmoji={handleSetEmoji}
+                ref={editInput}
+              />
+            )}
+            {Object.keys(updatingMessage).length === 0 && (
+              <MessageCreate
+                message={message}
+                handleChangeMessage={handleChangeMessage}
+                handleSubmitMessage={handleSubmitMessage}
+                selectEmoji={handleSetEmoji}
+                handleUpdateMessage={handleUpdateMessage}
+                updatingMessage={updatingMessage}
+                handleDeleteMessage={handleDeleteMessageAlert}
+                ref={createInput}
+              />
+            )}
+          </>
+        )}
+        {!room.name && <h1 className={'room-text'}>Choose a room</h1>}
+        {alert.showed && <AlertDialog acceptDialog={acceptDialog} />}
+      </>}
+      {snackBar.showed && <SnackBar />}
     </div>
   );
 }
