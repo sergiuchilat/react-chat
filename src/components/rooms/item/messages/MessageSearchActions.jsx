@@ -1,19 +1,30 @@
-import calendar from '../../../../assets/img/icons/calendar.png';
-
+import { useState } from 'react';
+import DatePicker from 'react-date-picker';
 export default function MessageSearchActions({
   handleCloseSearch,
   handleSearch,
+  handleChangeDate
 }) {
+  const [startDate, setStartDate] = useState(null);
+  const setDate = (date) => {
+    if(date) {
+      const finishDate = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
+      handleChangeDate(finishDate);
+    } else {
+      handleChangeDate('');
+    }
+    setStartDate(date);
+  };
   return (
     <div className={'message-search-actions'}>
-      <button className={'search-date'}>
-        <img
-          width={20}
-          height={20}
-          src={calendar}
-          alt={'calendar'} 
-        />
-      </button>
+      <DatePicker
+        className={`date-picker search-date ${startDate ? '' : 'clean-date'}`}
+        onChange={(date) => setDate(date)}
+        locale={'en'}
+        maxDate={new Date()}
+        format={'YYYY-MM-DD'}
+        value={startDate}
+      />
       <button
         onClick={() => handleSearch()}
         className={'search'}

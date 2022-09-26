@@ -1,9 +1,9 @@
 import Picker from 'emoji-picker-react';
-import smile from '../../../../assets/img/icons/smile.png';
-import attachment from '../../../../assets/img/icons/attachment.png';
-import send from '../../../../assets/img/icons/send.png';
+import smile from '../../../../assets/img/icons/smile.svg';
+import send from '../../../../assets/img/icons/send.svg';
 import { useState } from 'react';
-import bin from '../../../../assets/img/icons/rubbish-bin.png';
+import bin from '../../../../assets/img/icons/rubbish-bin.svg';
+import FileUploader from '../../../common/FileUploader';
 
 export default function MessageActions({
   handleUpdateMessage,
@@ -11,6 +11,7 @@ export default function MessageActions({
   updatingMessage,
   handleDeleteMessage,
   handleSubmitMessage,
+  parentMessage
 }) {
   const [emojiDialogVisible, setEmojiDialogVisible] = useState(false);
   const onEmojiClick = (event, emojiObject) => {
@@ -37,14 +38,7 @@ export default function MessageActions({
           onEmojiClick={onEmojiClick}
         />
       )}
-      <button className={'send-message'}>
-        <img
-          width={25}
-          height={25}
-          src={attachment}
-          alt={'attachment'}
-        />
-      </button>
+      <FileUploader />
       {Object.keys(updatingMessage).length === 0 && <button
         onClick={() => handleSubmitMessage()}
         className={'send-message'}
@@ -59,7 +53,7 @@ export default function MessageActions({
       {Object.keys(updatingMessage).length !== 0 && <>
         {updatingMessage.text.length !== 0 && (
           <button
-            onClick={() => handleUpdateMessage(updatingMessage.uuid)}
+            onClick={() => handleUpdateMessage(updatingMessage.uuid, parentMessage)}
             className={'send-message'}
           >
             <img

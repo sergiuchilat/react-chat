@@ -1,10 +1,11 @@
-import search from '../../../../assets/img/icons/loupe.png';
+import search from '../../../../assets/img/icons/loupe.svg';
 import MessageSearchActions from './MessageSearchActions';
 
 export default function MessageSearch({
   handleCloseSearch,
   handleSearchInput,
   handleSearch,
+  handleChangeDate
 }) {
   return (
     <div className={'message-search'}>
@@ -26,6 +27,7 @@ export default function MessageSearch({
       <MessageSearchActions
         handleCloseSearch={handleCloseSearch}
         handleSearch={handleSearch}
+        handleChangeDate={handleChangeDate}
       />
     </div>
   );

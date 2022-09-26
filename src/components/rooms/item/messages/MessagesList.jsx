@@ -1,12 +1,13 @@
-import MessageItem from './MessageItem';
+import MessageItem from './messageItem/MessageItem';
 import { forwardRef } from 'react';
 
 export const MessagesList = forwardRef(
-  ({ userUuid, messages, handleDeleteMessage, handleUpdateMessage }, ref) => {
+  ({ userUuid, messages, handleDeleteMessage, handleUpdateMessage, searchMessageActive, handleReplyMessage },
+    ref) => {
     return (
       <div
         ref={ref}
-        className={'messages_wrapper'}
+        className={`messages_wrapper ${searchMessageActive ? 'messages_search-active' : ''}`}
       >
         <div className={'messages'}>
           {messages.length !== 0 &&
@@ -16,7 +17,10 @@ export const MessagesList = forwardRef(
                 message={message}
                 handleDeleteMessage={handleDeleteMessage}
                 handleUpdateMessage={handleUpdateMessage}
+                searchMessageActive={searchMessageActive}
                 key={message.uuid}
+                messages={messages}
+                handleReplyMessage={handleReplyMessage}
               />
             ))}
           {messages.length === 0 && (

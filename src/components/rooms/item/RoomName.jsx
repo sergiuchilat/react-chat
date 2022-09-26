@@ -1,4 +1,4 @@
-import search from '../../../assets/img/icons/loupe.png';
+import search from '../../../assets/img/icons/loupe.svg';
 
 export default function RoomName({ name, handlerSearch }) {
   return (

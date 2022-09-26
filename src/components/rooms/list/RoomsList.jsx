@@ -3,19 +3,30 @@ import RoomSearch from './RoomSearch';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchRooms } from '../../../store/RoomsSlice';
+import useDebounce from '../../../hooks/useDebounce';
 
 export default function RoomsList() {
   const [searchString, setSearchString] = useState('');
   const rooms = useSelector(state => state.rooms.roomsList);
   const dispatch = useDispatch();
+  const debouncedSearch = useDebounce(fetchRoomsList, 500);
+
+  function fetchRoomsList(searchString) {
+    dispatch(fetchRooms(searchString));
+  }
 
   useEffect(() => {
-    dispatch(fetchRooms(searchString));
-  }, [dispatch, searchString]);
+    fetchRoomsList(searchString);
+  }, [dispatch]);
 
-
-  const onRoomSearch = async (search) => {
-    setSearchString(`?search=${search}`);
+  const onRoomSearch = (search) => {
+    if(!search) {
+      setSearchString('');
+      debouncedSearch('');
+    } else {
+      setSearchString(`?search=${search}`);
+      debouncedSearch(`?search=${search}`);
+    }
   };
 
   return (

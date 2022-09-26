@@ -26,6 +26,10 @@ export const RoomsSlice = createSlice({
   reducers: {
     selectRoom: (state,{ payload }) => {
       state.selectedRoom = payload;
+    },
+    setRead: (state, { payload }) => {
+      const room = state.roomsList.find(item => item.uuid === payload);
+      room.unread_messages = null;
     }
   },
   extraReducers: {
@@ -44,5 +48,5 @@ export const RoomsSlice = createSlice({
   }
 });
 
-export const { selectRoom } = RoomsSlice.actions;
+export const { selectRoom, setRead } = RoomsSlice.actions;
 export default RoomsSlice.reducer;

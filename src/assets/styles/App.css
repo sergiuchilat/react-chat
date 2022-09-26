@@ -1,6 +1,19 @@
 * {
   box-sizing: border-box;
 }
+::-webkit-scrollbar {
+  width: 5px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: transparent;
+  border-radius: 5px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #63acff;
+}
 button {
   background: transparent;
   border: none;
@@ -60,7 +73,7 @@ input:focus {
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  margin: 10px 0;
+  padding: 10px 0;
 }
 
 .room-list-item {
@@ -92,7 +105,7 @@ input:focus {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  width: 173px;
+  width: 150px;
 }
 .rooms-search-input {
   width: 100%;
@@ -123,6 +136,7 @@ input:focus {
 }
 .message-item-inner {
   display: flex;
+  margin-right: 66px;
   align-items: flex-end;
   position: relative;
 }
@@ -141,10 +155,12 @@ input:focus {
 }
 .message-item {
   margin-left: 5px;
-  margin-right: 55px;
   background-color: #eaeaea;
-  padding: 10px 30px 10px 10px;
+  padding: 10px 35px 10px 10px;
   border-radius: 10px;
+}
+.message-item p {
+  margin: 0;
 }
 .message-search {
   display: flex;
@@ -205,6 +221,7 @@ input:focus {
 .message-create {
   box-shadow: 0 0 4px rgb(0 0 0 / 12%), 0 -5px 4px rgb(0 0 0 / 5%);
   display: flex;
+  flex-direction: column;
   position: relative;
   padding: 5px;
   align-items: center;
@@ -215,13 +232,17 @@ input:focus {
   justify-content: end;
   margin: 0 0 0 66px;
 }
-.messages-hover {
+.message-item-inner.messages-hover{
+  margin-right: 0px;
+}
+
+.my-message-item-inner.messages-hover {
   margin: 0;
 }
 .my-message-item {
   background-color: #007aff;
   color: #fff;
-  margin: 0 10px 0 0;
+  margin: 0 5px 0 0;
   padding: 10px 10px 10px 35px;
 }
 .emoji-dialog {
@@ -231,15 +252,16 @@ input:focus {
 }
 .messages_wrapper {
   display: grid;
-  overflow-y: auto;
+  overflow-y: scroll;
   max-height: 450px;
+  transition: all 0.2s;
 }
 .message-date {
   position: absolute;
   bottom: 5px;
   font-size: 10px;
   color: #9f9f9f;
-  right: 65px;
+  right: 5px;
 }
 .my-message-item .message-date {
   left: 5px;
@@ -319,4 +341,82 @@ input:focus {
   align-items: center;
   border-top-right-radius: 10px;
   border-bottom-right-radius: 10px;
+}
+.room-unread-messages{
+  background-color: #3596ff;
+  border-radius: 50%;
+  padding: 1px 5px;
+  font-size: 13px;
+}
+.room-message{
+  display: flex;
+  justify-content: space-between;
+}
+
+.messages_wrapper:hover::-webkit-scrollbar-thumb{
+  background: #3596ff;
+}
+.rooms-list:hover::-webkit-scrollbar-thumb{
+  background: #3596ff;
+}
+.messages_search-active{
+ max-height: 495px;
+}
+.date-picker .react-date-picker__wrapper{
+  border: none;
+}
+.date-picker .react-date-picker__inputGroup, .clean-date .react-date-picker__clear-button{
+  display: none;
+}
+.date-picker .react-date-picker__calendar{
+  width: 250px;
+}
+.date-picker .react-calendar__tile{
+  padding: 6px;
+}
+.date-picker .react-calendar__year-view .react-calendar__tile{
+  padding: 15px 5px;
+}
+.my-message.without-avatar{
+padding-right: 25px;
+}
+.my-message, .foreign-message {
+  margin-bottom: 2px;
+  margin-left: 2px;
+}
+.foreign-message.without-avatar{
+  padding-left: 25px;
+}
+.unread {
+  background-color: #d7d6d669;
+}
+.foreign-message.unread {
+  background-color: transparent;
+}
+.message-create-inner{
+  display: flex;
+  align-items: center;
+  width: 100%;
+  justify-content: space-between;
+}
+.reply-message{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  border-left: 2px solid #afafaf;
+  padding-left: 5px;
+}
+.reply-message p {
+  max-width: 520px;
+  white-space: nowrap;
+  overflow: hidden;
+  margin: 0;
+  text-overflow: ellipsis;
+}
+.reply-text{
+  border-left: 2px solid #afafaf;
+  padding-left: 5px;
+  font-size: 11px;
+  color: #afafaf;
 }
