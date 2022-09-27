@@ -9,6 +9,12 @@ export default function RoomItem({ room }) {
     dispatch(selectRoom(roomUuid));
   };
 
+  const unreadMessages = () => room.unread_messages;
+  const lastMessage = () => room.last_message;
+
+  //todo .room-list .item .active
+  //todo img width and height must be in CSS
+  //todo replace h4 with div
   return (
     <div
       className={`room-list-item ${
@@ -26,14 +32,18 @@ export default function RoomItem({ room }) {
       />
       <div className={'room-list-header'}>
         <h4 className={'room-list-title'}>{room.name}</h4>
-        <div className={'room-message'}>
-          <p className={'room-list-last'}>
-            {room.last_message}
-          </p>
-          {room.unread_messages > 0 && <div className={'room-unread-messages'}>
-            {room.unread_messages}
-          </div>}
-        </div>
+        {
+          (lastMessage() || unreadMessages()) && <div className={'room-message'}>
+            {
+              lastMessage() && <p className={'room-list-last'}>
+                {lastMessage()}
+              </p>
+            }
+            {unreadMessages() && <div className={'room-unread-messages'}>
+              {unreadMessages()}
+            </div>}
+          </div>
+        }
       </div>
     </div>
   );

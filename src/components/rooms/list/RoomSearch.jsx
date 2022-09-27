@@ -9,7 +9,7 @@ export default function RoomSearch({ onSearch }) {
         className={'rooms-search-input'}
         placeholder={'Search room'}
         type={'text'}
-        onChange={(e) => handleSearch(e)}
+        onChange={handleSearch}
       />
     </div>
   );

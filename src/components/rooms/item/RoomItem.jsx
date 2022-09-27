@@ -13,23 +13,33 @@ import SnackBar from '../../dialogs/SnackBar';
 import { showSnackbar } from '../../../store/SnackBarSlice';
 import { setRead } from '../../../store/RoomsSlice';
 
+const initialStateRoom = {
+  name: '',
+};
+
+const initialStateMessageSearch = {
+  text: '',
+  date: '',
+};
+
+const initialStateMessages = [];
+//todo extract all initial states in a file
+
 export default function RoomItem({ userExternalUuid }) {
-  const [room, setRoom] = useState({
-    name: '',
-  });
-  const [messageSearch, setMessageSearch] = useState({
-    text: '',
-    date: '',
-  });
-  const [messages, setMessages] = useState([]);
-  const [message, setMessage] = useState('');
   const [user, setUser] = useState({});
-  const [searchMessageActive, setSearchMessageActive] = useState(false);
-  const [filters, setFilters] = useState('');
-  const [pending, setPending] = useState(false);
+  const [room, setRoom] = useState(initialStateRoom);
+  const [messages, setMessages] = useState(initialStateMessages);
+  //todo messageFilters
+  const [messageSearch, setMessageSearch] = useState(initialStateMessageSearch);
+  //todo newMessage?
+  const [message, setMessage] = useState('');
   const [updatingMessage, setUpdatingMessage] = useState({});
   const [selectedMessage, setSelectedMessage] = useState(null);
   const [replyMessage, setReplyMessage] = useState({});
+  const [searchMessageActive, setSearchMessageActive] = useState(false);
+  //todo remove filters
+  const [filters, setFilters] = useState('');
+  const [pending, setPending] = useState(false);
   const messagesList = useRef();
   const createInput = useRef();
   const editInput = useRef();
@@ -38,7 +48,7 @@ export default function RoomItem({ userExternalUuid }) {
   const snackBar = useSelector((state) => state.snackBar);
   const dispatch = useDispatch();
 
-  const validate = (text) =>  text.length;
+  const validMessageInput = (text) =>  text.length;
   const fetchRoomMessages = async (filters) => {
     try {
       const response = await new RoomsApi().getMessages(roomUuid, filters);
@@ -120,7 +130,7 @@ export default function RoomItem({ userExternalUuid }) {
   };
   const handleSubmitMessage = async (attachments) => {
     try {
-      if (validate(message)) {
+      if (validMessageInput(message)) {
         const finalMessage = {
           text: message,
           room_uuid: roomUuid,
@@ -227,7 +237,7 @@ export default function RoomItem({ userExternalUuid }) {
   };
   const handleUpdateMessage = async (messageUuid, parentUuid) => {
     try {
-      if (validate(updatingMessage.text)) {
+      if (validMessageInput(updatingMessage.text)) {
         if(!updatingMessage.parent_uuid){
           delete updatingMessage.parent_uuid;
         }
