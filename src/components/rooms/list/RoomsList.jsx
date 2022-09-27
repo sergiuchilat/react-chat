@@ -6,7 +6,7 @@ import { fetchRooms } from '../../../store/RoomsSlice';
 import useDebounce from '../../../hooks/useDebounce';
 
 //todo forward => mode = normal|forward
-export default function RoomsList({ }) {
+export default function RoomsList() {
   const [searchString, setSearchString] = useState('');
   const rooms = useSelector(state => state.rooms.roomsList);
   const dispatch = useDispatch();
