@@ -1,6 +1,4 @@
-
-export default function RoomSearch({ onSearch }){
-
+export default function RoomSearch({ onSearch }) {
   const handleSearch = (e) => {
     onSearch(e.target.value);
   };
@@ -8,8 +6,10 @@ export default function RoomSearch({ onSearch }){
   return (
     <div className={'rooms-search'}>
       <input
+        className={'rooms-search-input'}
+        placeholder={'Search room'}
         type={'text'}
-        onInput={handleSearch}
+        onChange={(e) => handleSearch(e)}
       />
     </div>
   );

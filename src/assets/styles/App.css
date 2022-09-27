@@ -1,0 +1,422 @@
+* {
+  box-sizing: border-box;
+}
+::-webkit-scrollbar {
+  width: 5px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: transparent;
+  border-radius: 5px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #63acff;
+}
+button {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+input:focus {
+  outline: none;
+}
+
+#wrapper {
+  display: grid;
+  grid-template-columns: 2fr 5fr;
+  margin: 0 auto;
+  height: 550px;
+  width: 800px;
+  position: relative;
+}
+
+#wrapper .rooms-list {
+  cursor: pointer;
+  padding-bottom: 10px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  max-height: 500px;
+}
+
+.rooms-search {
+  padding: 10px;
+  display: flex;
+  align-items: center;
+}
+.message-create aside.emoji-picker-react,
+.message-edit aside.emoji-picker-react {
+  position: absolute;
+  bottom: 54px;
+  right: 0;
+}
+#wrapper .rooms-item .room-name {
+  font-size: 23px;
+  padding: 0 10px;
+  border-top-right-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 0 4px rgb(0 0 0 / 12%), 0 4px 4px rgb(0 0 0 / 5%);
+}
+.room {
+  box-shadow: 0 0 4px rgb(0 0 0 / 12%), 0 4px 4px rgb(0 0 0 / 10%);
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+.room-text {
+  text-align: center;
+}
+.messages {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 10px 0;
+}
+
+.room-list-item {
+  padding: 5px 5px 5px 10px;
+  display: flex;
+  color: #fff;
+  align-items: center;
+  height: 52px;
+  transition: all 0.2s;
+}
+.room-list-item--active {
+  background-color: #3596ff;
+}
+.room-list-item:hover {
+  background-color: #2682f6;
+}
+.room-list-header {
+  margin: 0 0 0 10px;
+}
+.room-list-header h4,
+.room-list-header p {
+  margin: 0;
+}
+.room-list-last {
+  color: rgba(216, 216, 216, 0.97);
+}
+.room-list-title,
+.room-list-last {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 150px;
+}
+.rooms-search-input {
+  width: 100%;
+  height: 30px;
+  border: none;
+  background-color: #3596ff;
+  color: #fff;
+  padding: 0 5px;
+  border-radius: 5px;
+}
+.rooms-search-input::placeholder {
+  color: #fff;
+}
+
+.rooms-item {
+  display: grid;
+  position: relative;
+  grid-template-rows: 1fr 9fr auto;
+}
+.rooms-message-input {
+  background-color: transparent;
+  color: #000;
+  border: 1px solid #afafaf;
+}
+
+.rooms-message-input::placeholder {
+  color: rgba(0, 0, 0, 0.41);
+}
+.message-item-inner {
+  display: flex;
+  margin-right: 66px;
+  align-items: flex-end;
+  position: relative;
+}
+.messages-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 5px 10px;
+}
+.messages-item-actions {
+  flex-shrink: 0;
+  margin-right: 10px;
+}
+.flex-end {
+  justify-content: flex-end;
+}
+.message-item {
+  margin-left: 5px;
+  background-color: #eaeaea;
+  padding: 10px 35px 10px 10px;
+  border-radius: 10px;
+}
+.message-item p {
+  margin: 0;
+}
+.message-search {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 0 4px rgb(0 0 0 / 12%), 0 4px 4px rgb(0 0 0 / 5%);
+  border-top-right-radius: 10px;
+}
+.rooms-list-inner {
+  position: relative;
+  background: #007aff;
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+  display: grid;
+  grid-template-rows: 1fr 100%;
+}
+.message-search {
+  padding: 0 10px;
+}
+.search-cancel {
+  border-radius: 5px;
+  padding: 10px;
+  background-color: #eaeaea;
+}
+.search {
+  border-radius: 5px;
+  margin: 0 10px;
+  padding: 10px;
+  color: #fff;
+  background-color: #007aff;
+}
+.message-search-inner {
+  display: flex;
+  align-items: center;
+}
+.message-search-actions {
+  display: flex;
+  align-items: center;
+}
+.message-search-input {
+  height: 30px;
+  background-color: #eaeaea;
+  border: none;
+  border-radius: 5px;
+  padding: 0 5px;
+  width: 250px;
+}
+.search-date {
+  padding: 0;
+  margin-left: 10px;
+}
+.send-message {
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  padding: 5px;
+}
+.message-create {
+  box-shadow: 0 0 4px rgb(0 0 0 / 12%), 0 -5px 4px rgb(0 0 0 / 5%);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  padding: 5px;
+  align-items: center;
+  border-bottom-right-radius: 10px;
+  background-color: #eaeaea;
+}
+.my-message-item-inner {
+  justify-content: end;
+  margin: 0 0 0 66px;
+}
+.message-item-inner.messages-hover{
+  margin-right: 0;
+}
+
+.my-message-item-inner.messages-hover {
+  margin: 0;
+}
+.my-message-item {
+  background-color: #007aff;
+  color: #fff;
+  margin: 0 5px 0 0;
+  padding: 10px 10px 10px 35px;
+}
+.emoji-dialog {
+  background-color: #3596ff36;
+  border-radius: 10px;
+  padding: 5px;
+}
+.messages_wrapper {
+  display: grid;
+  overflow-y: scroll;
+  max-height: 450px;
+  transition: all 0.2s;
+}
+.message-date {
+  position: absolute;
+  bottom: 5px;
+  font-size: 10px;
+  color: #9f9f9f;
+  right: 5px;
+}
+.my-message-item .message-date {
+  left: 5px;
+}
+
+.message-edit {
+  box-shadow: 0 0 4px rgb(0 0 0 / 12%), 0 -5px 4px rgb(0 0 0 / 5%);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  padding: 5px;
+  align-items: center;
+  border-bottom-right-radius: 10px;
+  background-color: #eaeaea;
+}
+.message-edit-cancel {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+.message-edit-cancel h6 {
+  margin: 0;
+}
+.message-edit-input {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+.message-edit-input input {
+  border: 1px solid #afafaf;
+}
+.room-name-title{
+  width: 500px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.alert-dialog{
+  position: absolute;
+  padding: 20px;
+  left: 50%;
+  box-shadow: 0 0 10px rgb(0 0 0 / 40%);
+  top: 50%;
+  border-radius: 10px;
+  transform: translate(-50%, -50%);
+  background-color: #fff;
+}
+.alert-actions{
+  display: flex;
+  justify-content: space-between;
+}
+.alert-dialog h3{
+  margin: 5px 0;
+}
+.alert-actions button{
+  padding: 10px 15px;
+  border-radius: 10px;
+  color: #fff;
+}
+.alert-accept{
+  background-color: #007aff;
+}
+.alert-cancel {
+  background-color: rgb(255 81 81);
+}
+.snackBar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  right: 0;
+  background-color: #ff3b3b85;
+  border: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+.room-unread-messages{
+  background-color: #3596ff;
+  border-radius: 50%;
+  padding: 1px 5px;
+  font-size: 13px;
+}
+.room-message{
+  display: flex;
+  justify-content: space-between;
+}
+
+.messages_wrapper:hover::-webkit-scrollbar-thumb{
+  background: #3596ff;
+}
+.rooms-list:hover::-webkit-scrollbar-thumb{
+  background: #3596ff;
+}
+.messages_search-active{
+ max-height: 495px;
+}
+.date-picker .react-date-picker__wrapper{
+  border: none;
+}
+.date-picker .react-date-picker__inputGroup, .clean-date .react-date-picker__clear-button{
+  display: none;
+}
+.date-picker .react-date-picker__calendar{
+  width: 250px;
+}
+.date-picker .react-calendar__tile{
+  padding: 6px;
+}
+.date-picker .react-calendar__year-view .react-calendar__tile{
+  padding: 15px 5px;
+}
+.my-message.without-avatar{
+padding-right: 25px;
+}
+.my-message, .foreign-message {
+  margin-bottom: 2px;
+  margin-left: 2px;
+}
+.foreign-message.without-avatar{
+  padding-left: 25px;
+}
+.unread {
+  background-color: #d7d6d669;
+}
+.foreign-message.unread {
+  background-color: transparent;
+}
+.message-create-inner{
+  display: flex;
+  align-items: center;
+  width: 100%;
+  justify-content: space-between;
+}
+.reply-message{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  border-left: 2px solid #afafaf;
+  padding-left: 5px;
+}
+.reply-message p {
+  max-width: 520px;
+  white-space: nowrap;
+  overflow: hidden;
+  margin: 0;
+  text-overflow: ellipsis;
+}
+.reply-text{
+  border-left: 2px solid #afafaf;
+  padding-left: 5px;
+  font-size: 11px;
+  color: #afafaf;
+}

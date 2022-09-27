@@ -1,48 +1,45 @@
 import RoomItem from './RoomItem';
 import RoomSearch from './RoomSearch';
 import { useEffect, useState } from 'react';
-import RoomsApi from 'services/api/modules/RoomsApi';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchRooms } from '../../../store/RoomsSlice';
+import useDebounce from '../../../hooks/useDebounce';
 
-export default function RoomsList({ onSelect }){
-  const [rooms, setRooms] = useState([]);
+export default function RoomsList({ forward }) {
   const [searchString, setSearchString] = useState('');
+  const rooms = useSelector(state => state.rooms.roomsList);
+  const dispatch = useDispatch();
+  const debouncedSearch = useDebounce(fetchRoomsList, 500);
 
-  const fetchRoomsList = async () => {
-    try {
-      const response = await (new RoomsApi()).get(searchString);
-      setRooms(response);
-    } catch (e){
-      console.log(e);
+  function fetchRoomsList(searchString) {
+    dispatch(fetchRooms(searchString));
+  }
+
+  useEffect(() => {
+    fetchRoomsList(searchString);
+  }, [dispatch]);
+
+  const onRoomSearch = (search) => {
+    if(!search) {
+      setSearchString('');
+      debouncedSearch('');
+    } else {
+      setSearchString(`?search=${search}`);
+      debouncedSearch(`?search=${search}`);
     }
   };
 
-  useEffect(() => {
-    fetchRoomsList();
-  }, [searchString]);
-
-  const onRoomSelectHandle = (roomId) => {
-    onSelect(roomId);
-  };
-
-  const onRoomSearch = (searchString) => {
-    console.log(searchString);
-    setSearchString(searchString);
-  };
-
   return (
-    <div>
+    <div className={'rooms-list-inner'}>
       <RoomSearch onSearch={onRoomSearch} />
       <div className={'rooms-list'}>
-        {
-          rooms && rooms.map(room => (
+        {rooms.length !== 0 &&
+          rooms.map((room) => (
             <RoomItem
-              name={room.name}
-              id={room.id}
-              key={room.id}
-              onSelect={onRoomSelectHandle}
+              room={room}
+              key={room.uuid}
             />
-          ))
-        }
+          ))}
       </div>
     </div>
   );

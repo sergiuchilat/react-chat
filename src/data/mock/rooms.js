@@ -1,22 +1,22 @@
 export default [
   {
     id: 1,
-    name: 'Victor'
+    name: 'Victor',
   },
   {
     id: 2,
-    name: 'Power IT'
+    name: 'Power IT',
   },
   {
     id: 3,
-    name: 'Group Chat'
+    name: 'Group Chat',
   },
   {
     id: 4,
-    name: 'Private Chat'
+    name: 'Private Chat',
   },
   {
     id: 5,
-    name: 'Victorita'
-  }
+    name: 'Victorita',
+  },
 ];
