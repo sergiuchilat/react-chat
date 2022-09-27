@@ -233,7 +233,7 @@ input:focus {
   margin: 0 0 0 66px;
 }
 .message-item-inner.messages-hover{
-  margin-right: 0px;
+  margin-right: 0;
 }
 
 .my-message-item-inner.messages-hover {

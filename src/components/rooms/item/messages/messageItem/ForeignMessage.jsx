@@ -2,7 +2,19 @@ import avatar from '../../../../../assets/img/icons/avatar.svg';
 import Moment from 'react-moment';
 import reply from '../../../../../assets/img/icons/reply.svg';
 import forward from '../../../../../assets/img/icons/forward.svg';
+import { useDispatch } from 'react-redux';
+import { showAlert } from '../../../../../store/AlertDialogSlice';
 export default function ForeignMessage({ isHover, showAvatar, message, createdAt, handleReplyMessage, parentMessage }) {
+  const dispatch = useDispatch();
+
+  const handleForwardMessage = (message) => {
+    console.log(message);
+    const dialog = {
+      title: 'Forward a message'
+    };
+    dispatch(showAlert({ ...dialog }));
+  };
+
   return (
     <div className={'messages-wrapper'}>
       <div
@@ -38,7 +50,7 @@ export default function ForeignMessage({ isHover, showAvatar, message, createdAt
               alt={'reply'}
             />
           </button>
-          <button onClick={() => handleReplyMessage(message)}>
+          <button onClick={() => handleForwardMessage(message)}>
             <img
               width={16}
               src={forward}

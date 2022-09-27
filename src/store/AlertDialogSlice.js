@@ -6,6 +6,7 @@ const initialState = {
   message: '',
   width: '300',
   answer: false,
+  confirmed: false,
 };
 
 export const alertDialogSlice = createSlice({
@@ -18,6 +19,7 @@ export const alertDialogSlice = createSlice({
       state.message = action.payload.message;
       state.color = action.payload.color;
       state.width = action.payload.width;
+      state.confirmed = action.payload.confirmed;
     },
     cancelAlert: (state) => {
       state.answer = false;

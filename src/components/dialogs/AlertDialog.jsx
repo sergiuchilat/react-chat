@@ -1,5 +1,8 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { acceptAlert, cancelAlert } from '../../store/AlertDialogSlice';
+import { useEffect } from 'react';
+import { fetchRooms } from '../../store/RoomsSlice';
+import RoomsList from '../rooms/list/RoomsList';
 
 export default function AlertDialog({ acceptDialog }) {
   const alert = useSelector((state) => state.alert);
@@ -10,8 +13,10 @@ export default function AlertDialog({ acceptDialog }) {
   };
 
   const handleAccept = () => {
-    dispatch(acceptAlert());
-    acceptDialog();
+    if(alert.confirmed) {
+      dispatch(acceptAlert());
+      acceptDialog();
+    }
   };
 
   return (
@@ -27,6 +32,7 @@ export default function AlertDialog({ acceptDialog }) {
           {alert.message}
         </p>
       </div>
+      <RoomsList forward />
       <div className={'alert-actions'}>
         <button
           className={'alert-cancel'}
@@ -34,13 +40,14 @@ export default function AlertDialog({ acceptDialog }) {
         >
           Cancel
         </button>
+        {alert.confirmed &&
         <button
           className={'alert-accept'}
           onClick={handleAccept}
           autoFocus
         >
             Agree
-        </button>
+        </button>}
       </div>
     </div>
   );

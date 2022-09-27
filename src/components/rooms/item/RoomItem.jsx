@@ -83,7 +83,6 @@ export default function RoomItem({ userExternalUuid }) {
       const unreadMessagesUuid = messages.filter(message =>
         (message.sender_uuid !== user.uuid) && !message.is_read).map(message => message.uuid);
       if(unreadMessagesUuid.length){
-        console.log('ddd');
         readMessages(roomUuid, user.uuid, user.external_user_uuid, unreadMessagesUuid);
       }
     }
@@ -202,6 +201,7 @@ export default function RoomItem({ userExternalUuid }) {
       const confirm = {
         title: 'Delete a message',
         message: 'Are you sure?',
+        confirmed: true
       };
       dispatch(showAlert({ ...confirm }));
       setSelectedMessage(messageUuid);

@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchRooms } from '../../../store/RoomsSlice';
 import useDebounce from '../../../hooks/useDebounce';
 
-export default function RoomsList() {
+export default function RoomsList({ forward }) {
   const [searchString, setSearchString] = useState('');
   const rooms = useSelector(state => state.rooms.roomsList);
   const dispatch = useDispatch();
