@@ -6,7 +6,7 @@ import { store } from './store';
 import { useState } from 'react';
 
 function App() {
-  const userExternalUuid = 'c54cf8e0-34cd-11ed-a261-0242ac120002';
+  const userExternalUuid = '8445d2f8-34ce-11ed-a261-0242ac120002';
   const [membersUuid] = useState(['c54cf8e0-34cd-11ed-a261-0242ac120002',
     '8445d2f8-34ce-11ed-a261-0242ac120002']);
   const roomName = `room-${Math.trunc(Math.random() * 10)}`;

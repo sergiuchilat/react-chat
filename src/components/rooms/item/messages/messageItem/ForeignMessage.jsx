@@ -28,10 +28,10 @@ export default function ForeignMessage({ isHover, showAvatar, message, createdAt
         />}
         <div className={'message-item'}>
           {message.parent_uuid && <p className={'reply-text'}>
-            {parentMessage.text}
+            {parentMessage?.text}
           </p>}
           <p>
-            {message.text}
+            {message?.text}
           </p>
           <Moment
             format={'HH:mm'}

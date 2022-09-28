@@ -6,7 +6,7 @@ export default class RoomsApi extends ApiModel {
   }
 
   async getList(filter) {
-    return await this.http.get(`${this.resourceUrl}/${filter}`);
+    return await this.http.get(`${this.resourceUrl}/?search=${filter}`);
   }
   async getItem(roomUuid) {
     return await this.http.get(`${this.resourceUrl}/${roomUuid}/`);
@@ -21,7 +21,7 @@ export default class RoomsApi extends ApiModel {
     );
   }
   async getMessages(roomUuid, filter) {
-    return await this.http.get(`${this.resourceUrl}/${roomUuid}/messages/${filter}`);
+    return await this.http.get(`${this.resourceUrl}/${roomUuid}/messages/?search=${filter.text}&created_at=${filter.date}`);
   }
   async getMembers(roomUuid) {
     return await this.http.get(`${this.resourceUrl}/${roomUuid}/members/`);

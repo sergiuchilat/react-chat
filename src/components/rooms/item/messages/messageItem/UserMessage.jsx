@@ -36,10 +36,10 @@ export default function UserMessage(
             {createdAt}
           </Moment>
           {message.parent_uuid && <p className={'reply-text'}>
-            {parentMessage.text}
+            {parentMessage?.text}
           </p>}
           <p>
-            {message.text}
+            {message?.text}
           </p>
         </div>
         {showAvatar && <img

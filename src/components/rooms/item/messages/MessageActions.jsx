@@ -11,13 +11,13 @@ export default function MessageActions({
   updatingMessage,
   handleDeleteMessage,
   handleSubmitMessage,
-  parentMessage
+  parentMessage,
 }) {
   const [emojiDialogVisible, setEmojiDialogVisible] = useState(false);
   const onEmojiClick = (event, emojiObject) => {
     selectEmoji(emojiObject.emoji);
   };
-
+  console.log(Number(Object.keys(updatingMessage).length));
   return (
     <>
       <button
@@ -51,7 +51,7 @@ export default function MessageActions({
         />
       </button>}
       {Object.keys(updatingMessage).length !== 0 && <>
-        {updatingMessage.text.length !== 0 && (
+        {updatingMessage?.text.length !== 0 && (
           <button
             onClick={() => handleUpdateMessage(updatingMessage.uuid, parentMessage)}
             className={'send-message'}
@@ -63,7 +63,7 @@ export default function MessageActions({
               alt={'Send'}
             />
           </button>)}
-        {updatingMessage.text.length === 0 && (
+        {updatingMessage?.text.length === 0 && (
           <button
             onClick={() => handleDeleteMessage(updatingMessage.uuid)}
             className={'send-message'}

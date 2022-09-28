@@ -5,15 +5,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchRooms } from '../../../store/RoomsSlice';
 import useDebounce from '../../../hooks/useDebounce';
 
-//todo forward => mode = normal|forward
-export default function RoomsList() {
+export default function RoomsList( { mode }) {
   const [searchString, setSearchString] = useState('');
   const rooms = useSelector(state => state.rooms.roomsList);
   const dispatch = useDispatch();
 
-  //todo async
-  const fetchList = (searchString) => {
-    dispatch(fetchRooms(searchString));
+  const fetchList = async (searchString) => {
+    await dispatch(fetchRooms(searchString));
   };
   const debouncedSearch = useDebounce(fetchList, 500);
   useEffect(() => {
@@ -21,17 +19,9 @@ export default function RoomsList() {
   }, [dispatch]);
 
   const onSearch = (search) => {
-    const searchString = search ? `?search=${search}`: '';
+    const searchString = search || '';
     setSearchString(searchString);
     debouncedSearch(searchString);
-
-    if(!search) {
-      console.log('remove me');
-    } else {
-      //todo move ?search= in API
-      setSearchString(`?search=${search}`);
-      debouncedSearch(`?search=${search}`);
-    }
   };
 
   return (

@@ -12,39 +12,34 @@ export default function RoomItem({ room }) {
   const unreadMessages = () => room.unread_messages;
   const lastMessage = () => room.last_message;
 
-  //todo .room-list .item .active
-  //todo img width and height must be in CSS
-  //todo replace h4 with div
   return (
-    <div
-      className={`room-list-item ${
-        activeRoom === room.uuid ? 'room-list-item--active' : '' 
+    <main
+      className={`${
+        activeRoom === room.uuid ? 'active' : '' 
       }`}
       onClick={() => {
         onSelect(room.uuid);
       }}
     >
       <img
-        width={30}
-        height={30}
         src={avatar}
         alt={'avatar'}
       />
-      <div className={'room-list-header'}>
-        <h4 className={'room-list-title'}>{room.name}</h4>
+      <section>
+        <h4>{room.name}</h4>
         {
-          (lastMessage() || unreadMessages()) && <div className={'room-message'}>
+          (lastMessage() || unreadMessages()) && <article>
             {
-              lastMessage() && <p className={'room-list-last'}>
+              lastMessage() && <p>
                 {lastMessage()}
               </p>
             }
-            {unreadMessages() && <div className={'room-unread-messages'}>
+            {unreadMessages() && <span>
               {unreadMessages()}
-            </div>}
-          </div>
+            </span>}
+          </article>
         }
-      </div>
-    </div>
+      </section>
+    </main>
   );
 }

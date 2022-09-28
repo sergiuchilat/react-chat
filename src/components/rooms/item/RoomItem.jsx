@@ -12,43 +12,27 @@ import AlertDialog from '../../dialogs/AlertDialog';
 import SnackBar from '../../dialogs/SnackBar';
 import { showSnackbar } from '../../../store/SnackBarSlice';
 import { setRead } from '../../../store/RoomsSlice';
-
-const initialStateRoom = {
-  name: '',
-};
-
-const initialStateMessageSearch = {
-  text: '',
-  date: '',
-};
-
-const initialStateMessages = [];
-//todo extract all initial states in a file
+import { initialStates } from './InitialStatesRoomItem';
+import { scrollToBottom } from '../../../utils/ScrollToBottom';
+import { SetEmoji } from '../../../utils/SetEmoji';
 
 export default function RoomItem({ userExternalUuid }) {
-  const [user, setUser] = useState({});
-  const [room, setRoom] = useState(initialStateRoom);
-  const [messages, setMessages] = useState(initialStateMessages);
-  //todo messageFilters
-  const [messageSearch, setMessageSearch] = useState(initialStateMessageSearch);
-  //todo newMessage?
-  const [message, setMessage] = useState('');
-  const [updatingMessage, setUpdatingMessage] = useState({});
-  const [selectedMessage, setSelectedMessage] = useState(null);
-  const [replyMessage, setReplyMessage] = useState({});
-  const [searchMessageActive, setSearchMessageActive] = useState(false);
-  //todo remove filters
-  const [filters, setFilters] = useState('');
-  const [pending, setPending] = useState(false);
+  const [user, setUser] = useState(initialStates.user);
+  const [room, setRoom] = useState(initialStates.room);
+  const [messages, setMessages] = useState(initialStates.messages);
+  const [messageFilters, setMessageFilters] = useState(initialStates.messageFilters);
+  const [updatingMessage, setUpdatingMessage] = useState(initialStates.updatingMessage);
+  const [selectedMessage, setSelectedMessage] = useState(initialStates.selectedMessage);
+  const [replyMessage, setReplyMessage] = useState(initialStates.replyMessage);
+  const [searchMessageActive, setSearchMessageActive] = useState(initialStates.searchMessageActive);
+  const [pending, setPending] = useState(initialStates.pending);
   const messagesList = useRef();
-  const createInput = useRef();
   const editInput = useRef();
   const roomUuid = useSelector(state => state.rooms.selectedRoom);
   const alert = useSelector((state) => state.alert);
   const snackBar = useSelector((state) => state.snackBar);
   const dispatch = useDispatch();
 
-  const validMessageInput = (text) =>  text.length;
   const fetchRoomMessages = async (filters) => {
     try {
       const response = await new RoomsApi().getMessages(roomUuid, filters);
@@ -59,7 +43,7 @@ export default function RoomItem({ userExternalUuid }) {
       dispatch(showSnackbar({ message: e.message }));
     }
   };
-  const fetchRoomItem = async () => {
+  const fetchRoomItem = async (filters) => {
     try {
       if (roomUuid) {
         setPending(true);
@@ -75,7 +59,7 @@ export default function RoomItem({ userExternalUuid }) {
       dispatch(showSnackbar({ message: e.message }));
     } finally {
       setPending(false);
-      scrollToBottom();
+      scrollToBottom(messagesList);
     }
   };
   const readMessages = async (roomUuid, userUuid, externalUuid, messagesUuid) => {
@@ -108,16 +92,7 @@ export default function RoomItem({ userExternalUuid }) {
       dispatch(showSnackbar({ message: e.message }));
     }
   };
-  const scrollToBottom = (timeout = 400) => {
-    setTimeout(() => {
-      if (messagesList.current) {
-        messagesList.current.scroll({
-          top: messagesList.current.scrollHeight,
-          behavior: 'smooth',
-        });
-      }
-    }, timeout);
-  };
+
   const fetchRoomMembers = async () => {
     try {
       const response = await new RoomsApi().getMembers(roomUuid);
@@ -128,84 +103,39 @@ export default function RoomItem({ userExternalUuid }) {
       dispatch(showSnackbar({ message: e.message }));
     }
   };
-  const handleSubmitMessage = async (attachments) => {
-    try {
-      if (validMessageInput(message)) {
-        const finalMessage = {
-          text: message,
-          room_uuid: roomUuid,
-          sender_uuid: user.uuid,
-          parent_uuid: replyMessage?.uuid,
-          attachments: attachments || [],
-        };
-        if(!finalMessage.parent_uuid) {
-          delete finalMessage.parent_uuid;
-        }
-        const response = await new MessagesApi().createMessage({ ...finalMessage });
-        scrollToBottom();
-        if (response) {
-          await fetchRoomMessages(filters);
-          setReplyMessage({});
-        }
-      }
-      setMessage('');
-    } catch (e) {
-      dispatch(showSnackbar({ message: e.message }));
-    }
-  };
-  const handleChangeMessage = (message) => {
-    setMessage(message);
-  };
+
   const toggleSearchActive = async () => {
     setSearchMessageActive((searchMessageActive) => !searchMessageActive);
     setUpdatingMessage({});
     setReplyMessage({});
     if(searchMessageActive) {
-      setFilters('');
-      setMessageSearch({
+      const filter = {
         text: '',
         date: ''
-      });
-      await fetchRoomMessages('');
-      await scrollToBottom();
+      };
+      setMessageFilters({ ...filter });
+      await fetchRoomMessages({ ...filter });
+      await scrollToBottom(messagesList);
     }
   };
   const handleSearchInput = (value) => {
-    setMessageSearch({ ...messageSearch, text: value });
+    setMessageFilters({ ...messageFilters, text: value });
   };
   const handleChangeDate = (date) => {
-    setMessageSearch({ ...messageSearch, date: date });
+    setMessageFilters({ ...messageFilters, date: date });
   };
   const handleSearch = async () => {
-    if(messageSearch.text.length && messageSearch.date.length) {
-      setFilters(`?search=${messageSearch.text}&created_at=${messageSearch.date}`);
-      await fetchRoomMessages(`?search=${messageSearch.text}&created_at=${messageSearch.date}`);
-    } else if(messageSearch.text.length) {
-      setFilters(`?search=${messageSearch.text}`);
-      await fetchRoomMessages(`?search=${messageSearch.text}`);
-    } else if(messageSearch.date.length){
-      setFilters(`?created_at=${messageSearch.date}`);
-      await fetchRoomMessages(`?created_at=${messageSearch.date}`);
+    if(messageFilters.text.length || messageFilters.date.length) {
+      await fetchRoomMessages(messageFilters);
     } else {
-      setFilters('');
-      await fetchRoomMessages('');
+      await fetchRoomMessages({
+        text: '',
+        date: ''
+      });
     }
   };
-  const handleSetEmoji = (emoji) => {
-    if (Object.keys(updatingMessage).length) {
-      const cursor = editInput.current.selectionStart;
-      setUpdatingMessage(
-        updatingMessage.text.slice(0, cursor) +
-          emoji +
-          updatingMessage.text.slice(cursor)
-      );
-      editInput.current.focus();
-    } else {
-      const cursor = createInput.current.selectionStart;
-      setMessage(message.slice(0, cursor) + emoji + message.slice(cursor));
-      createInput.current.focus();
-    }
-  };
+
+
   const handleDeleteMessageAlert = async (messageUuid) => {
     try {
       const confirm = {
@@ -223,7 +153,7 @@ export default function RoomItem({ userExternalUuid }) {
     try {
       const response = await new MessagesApi().deleteMessage(messageUuid);
       if (response.status === 204) {
-        await fetchRoomMessages(filters);
+        await fetchRoomMessages(messageFilters);
       }
       if (Object.keys(updatingMessage).length !== 0) {
         setUpdatingMessage({});
@@ -235,27 +165,8 @@ export default function RoomItem({ userExternalUuid }) {
   const handleFinishUpdatingMessage = (message) => {
     setUpdatingMessage(message);
   };
-  const handleUpdateMessage = async (messageUuid, parentUuid) => {
-    try {
-      if (validMessageInput(updatingMessage.text)) {
-        if(!updatingMessage.parent_uuid){
-          delete updatingMessage.parent_uuid;
-        }
-        /*    if(!Object.keys(parentUuid).length){
-          updatingMessage.parent_uuid = null;
-        }*/
-        console.log(updatingMessage);
-        const response = await new MessagesApi().updateMessage(messageUuid, { ...updatingMessage });
-        setUpdatingMessage({});
-        if (response.data) {
-          await fetchRoomMessages(filters);
-        }
-      } else {
-        await handleDeleteMessageAlert(messageUuid);
-      }
-    } catch (e) {
-      dispatch(showSnackbar({ message: e.message }));
-    }
+  const handleSetEmoji = (emoji) => {
+    SetEmoji(emoji, editInput, updatingMessage.text, setUpdatingMessage);
   };
   const handleCancelUpdateMessage = () => {
     setUpdatingMessage({});
@@ -273,33 +184,30 @@ export default function RoomItem({ userExternalUuid }) {
   const handleRemoveParentMessage = () => {
     setReplyMessage({});
   };
-  useEffect(() => {
-    const fetchData = async () => {
-      await fetchRoomItem();
-
-    };
-    fetchData().catch(console.error);
+  const resetRoom = () => {
     setUpdatingMessage({});
     setReplyMessage({});
-    // const socketUrl = `ws://157.230.122.163:8108/ws/rooms/${roomUuid}/messages`;
-    // console.log(socketUrl, 'socket url');
-    // if (roomUuid) {
-    //   const socket = new WebSocket(socketUrl);
-    //   socket.onmessage = (event) => {
-    //     console.log(event);
-    //   };
-    //   socket.on('connect', () => {
-    //     console.log('connected');
-    //   });
-    //   socket.on('disconnect', () => {
-    //     console.log('disconnect');
-    //   });
-    //   socket.on('addMessage', (payload) => {
-    //     console.log(payload, 'payload');
-    //   });
-    // }
-
-    // fetchRoomMessages();
+    setMessageFilters({
+      text: '',
+      date: ''
+    });
+    setSearchMessageActive(false);
+  };
+  const resetMessages = async () => {
+    scrollToBottom(messagesList);
+    await fetchRoomMessages(messageFilters);
+    setReplyMessage({});
+    setUpdatingMessage({});
+  };
+  useEffect(() => {
+    resetRoom();
+    const fetchData = async () => {
+      await fetchRoomItem({
+        text: '',
+        date: ''
+      });
+    };
+    fetchData().catch(console.error);
   }, [roomUuid]);
 
   return (
@@ -337,27 +245,24 @@ export default function RoomItem({ userExternalUuid }) {
               {Object.keys(updatingMessage).length !== 0 && (
                 <MessageEdit
                   updatingMessage={updatingMessage}
-                  handleUpdateMessage={handleUpdateMessage}
+                  updateMessage={resetMessages}
                   handleChangeUpdatingMessage={handleChangeUpdatingMessage}
-                  handleDeleteMessage={handleDeleteMessageAlert}
                   handleCancelUpdateMessage={handleCancelUpdateMessage}
                   selectEmoji={handleSetEmoji}
+                  handleDeleteMessageAlert={handleDeleteMessageAlert}
                   ref={editInput}
                   messages={messages}
                 />
               )}
               {Object.keys(updatingMessage).length === 0 && (
                 <MessageCreate
-                  message={message}
-                  handleChangeMessage={handleChangeMessage}
-                  handleSubmitMessage={handleSubmitMessage}
-                  selectEmoji={handleSetEmoji}
-                  handleUpdateMessage={handleUpdateMessage}
+                  resetMessages={resetMessages}
                   updatingMessage={updatingMessage}
                   handleDeleteMessage={handleDeleteMessageAlert}
                   replyMessage={replyMessage}
-                  ref={createInput}
                   handleRemoveParentMessage={handleRemoveParentMessage}
+                  roomUuid={roomUuid}
+                  user={user}
                 />
               )}
             </>}

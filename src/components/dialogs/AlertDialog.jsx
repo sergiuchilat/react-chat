@@ -1,7 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { acceptAlert, cancelAlert } from '../../store/AlertDialogSlice';
-import { useEffect } from 'react';
-import { fetchRooms } from '../../store/RoomsSlice';
 import RoomsList from '../rooms/list/RoomsList';
 
 export default function AlertDialog({ acceptDialog }) {
@@ -32,7 +30,7 @@ export default function AlertDialog({ acceptDialog }) {
           {alert.message}
         </p>
       </div>
-      <RoomsList forward />
+      {!alert.confirmed && <RoomsList forward />}
       <div className={'alert-actions'}>
         <button
           className={'alert-cancel'}
