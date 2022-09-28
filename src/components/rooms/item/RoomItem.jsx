@@ -208,6 +208,15 @@ export default function RoomItem({ userExternalUuid }) {
       });
     };
     fetchData().catch(console.error);
+    let interval;
+    if(roomUuid){
+      interval = setInterval(() => {
+        fetchRoomMessages(messageFilters);
+      }, 3000);
+    }
+    return () => {
+      clearInterval(interval);
+    };
   }, [roomUuid]);
 
   return (

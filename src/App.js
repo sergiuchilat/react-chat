@@ -6,11 +6,10 @@ import { store } from './store';
 import { useState } from 'react';
 
 function App() {
-  const userExternalUuid = '8445d2f8-34ce-11ed-a261-0242ac120002';
+  const [userExternalUuid, setUserExternalUuid] = useState('8445d2f8-34ce-11ed-a261-0242ac120002');
   const [membersUuid] = useState(['c54cf8e0-34cd-11ed-a261-0242ac120002',
     '8445d2f8-34ce-11ed-a261-0242ac120002']);
   const roomName = `room-${Math.trunc(Math.random() * 10)}`;
-
   const createRoom = async (roomName, membersUuid) => {
     try {
       const response = await new RoomsApi().create({
@@ -37,9 +36,16 @@ function App() {
     }
   };
 
+  const changeUuid = (e) => {
+    setUserExternalUuid(e.target.value);
+  };
   return (
     <Provider store={store}>
       <h1>Super chat APP</h1>
+      <input
+        value={userExternalUuid}
+        onChange={(e) => changeUuid(e)}
+      />
       <button onClick={() => createRoom(roomName,membersUuid)}>Create room</button>
       <ChatWrapper userExternalUuid={userExternalUuid} />
     </Provider>

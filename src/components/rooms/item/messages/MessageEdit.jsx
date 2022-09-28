@@ -28,7 +28,6 @@ export const MessageEdit = forwardRef(
           //   updatingMessage.parent_uuid = null;
           // }
           const response = await new MessagesApi().updateMessage(messageUuid, { ...updatingMessage });
-
           if (response.data) {
             updateMessage();
           }
