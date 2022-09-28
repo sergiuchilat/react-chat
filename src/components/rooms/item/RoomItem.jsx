@@ -92,7 +92,6 @@ export default function RoomItem({ userExternalUuid }) {
       dispatch(showSnackbar({ message: e.message }));
     }
   };
-
   const fetchRoomMembers = async () => {
     try {
       const response = await new RoomsApi().getMembers(roomUuid);
@@ -103,7 +102,6 @@ export default function RoomItem({ userExternalUuid }) {
       dispatch(showSnackbar({ message: e.message }));
     }
   };
-
   const toggleSearchActive = async () => {
     setSearchMessageActive((searchMessageActive) => !searchMessageActive);
     setUpdatingMessage({});
@@ -134,8 +132,6 @@ export default function RoomItem({ userExternalUuid }) {
       });
     }
   };
-
-
   const handleDeleteMessageAlert = async (messageUuid) => {
     try {
       const confirm = {
@@ -166,7 +162,7 @@ export default function RoomItem({ userExternalUuid }) {
     setUpdatingMessage(message);
   };
   const handleSetEmoji = (emoji) => {
-    SetEmoji(emoji, editInput, updatingMessage.text, setUpdatingMessage);
+    SetEmoji(emoji, editInput, updatingMessage, setUpdatingMessage);
   };
   const handleCancelUpdateMessage = () => {
     setUpdatingMessage({});
@@ -208,15 +204,6 @@ export default function RoomItem({ userExternalUuid }) {
       });
     };
     fetchData().catch(console.error);
-    let interval;
-    if(roomUuid){
-      interval = setInterval(() => {
-        fetchRoomMessages(messageFilters);
-      }, 3000);
-    }
-    return () => {
-      clearInterval(interval);
-    };
   }, [roomUuid]);
 
   return (

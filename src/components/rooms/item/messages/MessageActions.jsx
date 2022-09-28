@@ -6,18 +6,12 @@ import bin from '../../../../assets/img/icons/rubbish-bin.svg';
 import FileUploader from '../../../common/FileUploader';
 
 export default function MessageActions({
-  handleUpdateMessage,
-  selectEmoji,
-  updatingMessage,
-  handleDeleteMessage,
-  handleSubmitMessage,
-  parentMessage,
-}) {
+  handleUpdateMessage, selectEmoji, updatingMessage,
+  handleDeleteMessage, handleSubmitMessage, parentMessage, }) {
   const [emojiDialogVisible, setEmojiDialogVisible] = useState(false);
   const onEmojiClick = (event, emojiObject) => {
     selectEmoji(emojiObject.emoji);
   };
-  console.log(Number(Object.keys(updatingMessage).length));
   return (
     <>
       <button
@@ -50,7 +44,7 @@ export default function MessageActions({
           alt={'Send'}
         />
       </button>}
-      {Object.keys(updatingMessage).length !== 0 && <>
+      {updatingMessage.text && <>
         {updatingMessage?.text.length !== 0 && (
           <button
             onClick={() => handleUpdateMessage(updatingMessage.uuid, parentMessage)}
