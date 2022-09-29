@@ -5,6 +5,7 @@ import { useState } from 'react';
 import MessagesApi from '../../../../services/api/modules/MessagesApi';
 import { showSnackbar } from '../../../../store/SnackBarSlice';
 import { useDispatch } from 'react-redux';
+import Tooltip from '../../../common/Tooltip';
 export const MessageEdit = forwardRef(
   ({ updatingMessage, updateMessage, handleChangeUpdatingMessage,
     handleCancelUpdateMessage, selectEmoji, messages, handleDeleteMessageAlert }, ref) => {
@@ -48,23 +49,27 @@ export const MessageEdit = forwardRef(
       <div className={'message-edit'}>
         {Object.keys(parentMessage).length > 0 && <div className={'reply-message'}>
           <p>{parentMessage.text}</p>
-          <button onClick={() => removeParentMessage()}>
-            <img
-              height={16}
-              width={16}
-              src={cancel}
-              alt={'cancel'}
-            />
-          </button>
+          <Tooltip title={'Remove'}>
+            <button onClick={() => removeParentMessage()}>
+              <img
+                height={16}
+                width={16}
+                src={cancel}
+                alt={'cancel'}
+              />
+            </button>
+          </Tooltip>
         </div>}
         <div className={'message-edit-input'}>
-          <button onClick={handleCancelUpdateMessage}>
-            <img
-              width={25}
-              src={cancel}
-              alt={'cancel'}
-            />
-          </button>
+          <Tooltip title={'Cancel'}>
+            <button onClick={handleCancelUpdateMessage}>
+              <img
+                width={25}
+                src={cancel}
+                alt={'cancel'}
+              />
+            </button>
+          </Tooltip>
           <input
             ref={ref}
             placeholder={'Type your message...'}

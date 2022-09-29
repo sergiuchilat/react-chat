@@ -1,6 +1,13 @@
 * {
   box-sizing: border-box;
 }
+.main{
+  position: relative;
+}
+.container{
+  margin: 0 auto;
+  width: 800px;
+}
 ::-webkit-scrollbar {
   width: 5px;
 }
@@ -27,9 +34,7 @@ input:focus {
 #wrapper {
   display: grid;
   grid-template-columns: 2fr 5fr;
-  margin: 0 auto;
   height: 550px;
-  width: 800px;
   position: relative;
 }
 
@@ -99,7 +104,7 @@ input:focus {
 }
 
 .rooms-list section p {
-  color: rgba(216, 216, 216, 0.97);
+  color: #d8d8d8;
 }
 .rooms-list section h4,
 .rooms-list section p {
@@ -209,10 +214,10 @@ input:focus {
   border-radius: 5px;
   padding: 0 5px;
   width: 250px;
+  margin-right: 5px;
 }
 .search-date {
   padding: 0;
-  margin-left: 10px;
 }
 .send-message {
   border: none;
@@ -245,7 +250,7 @@ input:focus {
   background-color: #007aff;
   color: #fff;
   margin: 0 5px 0 0;
-  padding: 10px 10px 10px 35px;
+  padding-right: 45px;
 }
 .emoji-dialog {
   background-color: #3596ff36;
@@ -266,7 +271,23 @@ input:focus {
   right: 5px;
 }
 .my-message-item .message-date {
-  left: 5px;
+  right: 24px;
+  color: #cecececf;
+}
+.my-message-item .message-date.message-with-avatar {
+  right: 49px;
+}
+.message-read {
+  position: absolute;
+  right: 9px;
+  bottom: 3px;
+}
+.message-read.message-with-avatar {
+  right: 34px;
+}
+.message-read  img{
+  height: 10px;
+  width: 10px;
 }
 
 .message-edit {
@@ -389,12 +410,6 @@ padding-right: 25px;
 .foreign-message.without-avatar{
   padding-left: 25px;
 }
-.unread {
-  background-color: #d7d6d669;
-}
-.foreign-message.unread {
-  background-color: transparent;
-}
 .message-create-inner{
   display: flex;
   align-items: center;
@@ -421,4 +436,53 @@ padding-right: 25px;
   padding-left: 5px;
   font-size: 11px;
   color: #afafaf;
+}
+.chat-open{
+  border-radius: 50%;
+  background-color: #3596ff;
+  color: #fff;
+  padding: 15px 10px;
+  position: absolute;
+  bottom: 25px;
+  right: 25px;
+}
+.tooltip{
+  position: relative;
+}
+.tooltip-title{
+  position: absolute;
+  z-index: 5;
+  top: -25px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #007aff;
+  color: #ffffff;
+  border-radius: 5px;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 2px 5px;
+}
+
+.create-room{
+  background-color: #007aff;
+  color: #fff;
+  display: flex;
+  padding: 5px;
+  margin-top: 5px;
+}
+.chat-header{
+  background: #007aff;
+  color: #fff;
+  display: flex;
+  padding: 9px;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  /* padding-left: 236px; */
+  font-size: 30px;
+  justify-content: center;
+  align-items: center;
+}
+.chat-header img {
+  width: 25px;
+  height: 25px;
 }

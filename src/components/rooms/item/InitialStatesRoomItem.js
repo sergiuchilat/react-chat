@@ -13,6 +13,11 @@ export const initialStates = {
   selectedMessage: null,
   replyMessage: {},
   searchMessageActive: false,
-  pending: false
+  pending: false,
+  confirm: {
+    title: 'Delete a message',
+    message: 'Are you sure?',
+    confirmed: true
+  }
 };
 

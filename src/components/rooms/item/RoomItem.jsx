@@ -107,10 +107,7 @@ export default function RoomItem({ userExternalUuid }) {
     setUpdatingMessage({});
     setReplyMessage({});
     if(searchMessageActive) {
-      const filter = {
-        text: '',
-        date: ''
-      };
+      const filter = { ...initialStates.messageFilters };
       setMessageFilters({ ...filter });
       await fetchRoomMessages({ ...filter });
       await scrollToBottom(messagesList);
@@ -126,20 +123,13 @@ export default function RoomItem({ userExternalUuid }) {
     if(messageFilters.text.length || messageFilters.date.length) {
       await fetchRoomMessages(messageFilters);
     } else {
-      await fetchRoomMessages({
-        text: '',
-        date: ''
-      });
+      await fetchRoomMessages({ ...initialStates.messageFilters });
     }
+    scrollToBottom(messagesList);
   };
   const handleDeleteMessageAlert = async (messageUuid) => {
     try {
-      const confirm = {
-        title: 'Delete a message',
-        message: 'Are you sure?',
-        confirmed: true
-      };
-      dispatch(showAlert({ ...confirm }));
+      dispatch(showAlert({ ...initialStates.confirm }));
       setSelectedMessage(messageUuid);
     } catch (e) {
       dispatch(showSnackbar({ message: e.message }));
@@ -183,10 +173,7 @@ export default function RoomItem({ userExternalUuid }) {
   const resetRoom = () => {
     setUpdatingMessage({});
     setReplyMessage({});
-    setMessageFilters({
-      text: '',
-      date: ''
-    });
+    setMessageFilters({ ...initialStates.messageFilters });
     setSearchMessageActive(false);
   };
   const resetMessages = async () => {
@@ -198,10 +185,7 @@ export default function RoomItem({ userExternalUuid }) {
   useEffect(() => {
     resetRoom();
     const fetchData = async () => {
-      await fetchRoomItem({
-        text: '',
-        date: ''
-      });
+      await fetchRoomItem({ ...initialStates.messageFilters });
     };
     fetchData().catch(console.error);
   }, [roomUuid]);

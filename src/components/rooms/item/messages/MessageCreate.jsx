@@ -7,6 +7,7 @@ import { useDispatch } from 'react-redux';
 import { initialStates } from '../InitialStatesRoomItem';
 import { SetEmoji } from '../../../../utils/SetEmoji';
 import { useRef } from 'react';
+import Tooltip from '../../../common/Tooltip';
 
 export const MessageCreate = ({ resetMessages, updatingMessage,
   handleDeleteMessage, replyMessage, handleRemoveParentMessage, roomUuid, user }) => {
@@ -49,14 +50,17 @@ export const MessageCreate = ({ resetMessages, updatingMessage,
     <div className={'message-create'}>
       {Object.keys(replyMessage).length > 0 && <div className={'reply-message'}>
         <p>{replyMessage.text}</p>
-        <button onClick={() => handleRemoveParentMessage()}>
-          <img
-            height={16}
-            width={16}
-            src={cancel}
-            alt={'cancel'}
-          />
-        </button>
+        <Tooltip title={'Cancel'}>
+          <button onClick={() => handleRemoveParentMessage()}>
+            <img
+              height={16}
+              width={16}
+              src={cancel}
+              alt={'cancel'}
+            />
+          </button>
+        </Tooltip>
+
       </div>}
       <div className={'message-create-inner'}>
         <input

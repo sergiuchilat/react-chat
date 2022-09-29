@@ -4,8 +4,9 @@ import RoomsApi from './services/api/modules/RoomsApi';
 import { Provider } from 'react-redux';
 import { store } from './store';
 import { useState } from 'react';
-
+import logo from './assets/img/logos/react-logo.png';
 function App() {
+  const [chatMode, setChatMode] = useState(false);
   const [userExternalUuid, setUserExternalUuid] = useState('8445d2f8-34ce-11ed-a261-0242ac120002');
   const [membersUuid] = useState(['c54cf8e0-34cd-11ed-a261-0242ac120002',
     '8445d2f8-34ce-11ed-a261-0242ac120002']);
@@ -35,19 +36,40 @@ function App() {
       console.log(e);
     }
   };
-
+  const toggleChangeMode = () => {
+    setChatMode(chatMode => !chatMode);
+  };
   const changeUuid = (e) => {
     setUserExternalUuid(e.target.value);
   };
   return (
     <Provider store={store}>
-      <h1>Super chat APP</h1>
-      <input
-        value={userExternalUuid}
-        onChange={(e) => changeUuid(e)}
-      />
-      <button onClick={() => createRoom(roomName,membersUuid)}>Create room</button>
-      <ChatWrapper userExternalUuid={userExternalUuid} />
+      <div style={{ textAlign: 'center' }}>
+        <strong>Super chat APP</strong>
+        <div>User external Uuid</div>
+        <input
+          value={userExternalUuid}
+          onChange={(e) => changeUuid(e)}
+        />
+        <button
+          className={'create-room'}
+          onClick={() => createRoom(roomName,membersUuid)}
+        >
+          Create room
+        </button>
+      </div>
+
+      {chatMode && <ChatWrapper
+        logo={logo}
+        title={'Header'}
+        userExternalUuid={userExternalUuid}
+      />}
+      {!chatMode && <button
+        className={'chat-open'}
+        onClick={toggleChangeMode}
+      >
+        Chat
+      </button>}
     </Provider>
   );
 }

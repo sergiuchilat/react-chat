@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import DatePicker from 'react-date-picker';
+import Tooltip from '../../../common/Tooltip';
 export default function MessageSearchActions({
   handleCloseSearch,
   handleSearch,
@@ -17,14 +18,17 @@ export default function MessageSearchActions({
   };
   return (
     <div className={'message-search-actions'}>
-      <DatePicker
-        className={`date-picker search-date ${startDate ? '' : 'clean-date'}`}
-        onChange={(date) => setDate(date)}
-        locale={'en'}
-        maxDate={new Date()}
-        format={'YYYY-MM-DD'}
-        value={startDate}
-      />
+      <Tooltip title={'Date'}>
+        <DatePicker
+          className={`date-picker search-date ${startDate ? '' : 'clean-date'}`}
+          onChange={(date) => setDate(date)}
+          locale={'en'}
+          maxDate={new Date()}
+          format={'YYYY-MM-DD'}
+          value={startDate}
+        />
+      </Tooltip>
+
       <button
         onClick={() => handleSearch()}
         className={'search'}

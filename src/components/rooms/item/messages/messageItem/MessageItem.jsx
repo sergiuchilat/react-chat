@@ -50,7 +50,7 @@ export default function MessageItemWrapper({
     <div
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
-      className={`${message.sender_uuid !== userUuid ? 'foreign-message' : 'my-message'} ${!showAvatar ? 'without-avatar' : ''} ${!message.is_read ? 'unread': ''}`}
+      className={`${message.sender_uuid !== userUuid ? 'foreign-message' : 'my-message'} ${!showAvatar ? 'without-avatar' : ''}`}
       ref={messageItem}
     >
       {message.sender_uuid !== userUuid && (

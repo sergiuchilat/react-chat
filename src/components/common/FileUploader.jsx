@@ -1,5 +1,6 @@
 import { useRef } from 'react';
 import attachment from '../../assets/img/icons/attachment.svg';
+import Tooltip from './Tooltip';
 
 export default function FileUploader() {
   const fileInput = useRef(null);
@@ -23,6 +24,7 @@ export default function FileUploader() {
           alt={'attachment'}
         />
       </button>
+
       <input
         ref={fileInput}
         style={{ display: 'none' }}

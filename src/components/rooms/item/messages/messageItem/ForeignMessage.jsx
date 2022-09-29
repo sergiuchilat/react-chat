@@ -4,6 +4,7 @@ import reply from '../../../../../assets/img/icons/reply.svg';
 import forward from '../../../../../assets/img/icons/forward.svg';
 import { useDispatch } from 'react-redux';
 import { showAlert } from '../../../../../store/AlertDialogSlice';
+import Tooltip from '../../../../common/Tooltip';
 export default function ForeignMessage({ isHover, showAvatar, message, createdAt, handleReplyMessage, parentMessage }) {
   const dispatch = useDispatch();
 
@@ -43,20 +44,24 @@ export default function ForeignMessage({ isHover, showAvatar, message, createdAt
       </div>
       {isHover && (
         <div className={'messages-item-actions'}>
-          <button onClick={() => handleReplyMessage(message)}>
-            <img
-              width={16}
-              src={reply}
-              alt={'reply'}
-            />
-          </button>
-          <button onClick={() => handleForwardMessage(message)}>
-            <img
-              width={16}
-              src={forward}
-              alt={'forward'}
-            />
-          </button>
+          <Tooltip title={'Reply'}>
+            <button onClick={() => handleReplyMessage(message)}>
+              <img
+                width={16}
+                src={reply}
+                alt={'reply'}
+              />
+            </button>
+          </Tooltip>
+          <Tooltip title={'Forward'}>
+            <button onClick={() => handleForwardMessage(message)}>
+              <img
+                width={16}
+                src={forward}
+                alt={'forward'}
+              />
+            </button>
+          </Tooltip>
         </div>
       )}
     </div>

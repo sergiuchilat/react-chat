@@ -4,6 +4,7 @@ import send from '../../../../assets/img/icons/send.svg';
 import { useState } from 'react';
 import bin from '../../../../assets/img/icons/rubbish-bin.svg';
 import FileUploader from '../../../common/FileUploader';
+import Tooltip from '../../../common/Tooltip';
 
 export default function MessageActions({
   handleUpdateMessage, selectEmoji, updatingMessage,
@@ -44,7 +45,7 @@ export default function MessageActions({
           alt={'Send'}
         />
       </button>}
-      {updatingMessage.text && <>
+      {Object.keys(updatingMessage).length !== 0 && <>
         {updatingMessage?.text.length !== 0 && (
           <button
             onClick={() => handleUpdateMessage(updatingMessage.uuid, parentMessage)}
@@ -58,17 +59,20 @@ export default function MessageActions({
             />
           </button>)}
         {updatingMessage?.text.length === 0 && (
-          <button
-            onClick={() => handleDeleteMessage(updatingMessage.uuid)}
-            className={'send-message'}
-          >
-            <img
-              width={25}
-              height={25}
-              src={bin}
-              alt={'delete'}
-            />
-          </button>
+          <Tooltip title={'Remove'}>
+            <button
+              onClick={() => handleDeleteMessage(updatingMessage.uuid)}
+              className={'send-message'}
+            >
+              <img
+                width={25}
+                height={25}
+                src={bin}
+                alt={'delete'}
+              />
+            </button>
+          </Tooltip>
+
         )}
       </>}
     </>

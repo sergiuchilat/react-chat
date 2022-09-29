@@ -19,6 +19,7 @@ export default function MessageSearch({
         />
         <input
           onChange={(e) => handleSearchInput(e.target.value)}
+          onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
           placeholder={'Search Message'}
           className={'message-search-input'}
           type={'text'}
