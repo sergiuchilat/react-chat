@@ -17,6 +17,7 @@ export const colors = {
     primary: '#d8d8d8',
     date_primary: '#9f9f9f',
     date_secondary: '#cecececf',
+    highlight: '#30ec23',
     white: '#ffffff',
     black: '#000000'
   },

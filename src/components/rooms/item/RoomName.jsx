@@ -1,8 +1,8 @@
 import search from '../../../assets/img/icons/loupe.svg';
 
-export default function RoomName({ name, handlerSearch }) {
+export default function RoomName({ isHeader, name, handlerSearch }) {
   return (
-    <div className={'room-name'}>
+    <div className={`room-name ${isHeader ? 'with-header': ''}`}>
       <div className={'room-name-title'}>{name}</div>
       <button
         className={'room-search-btn'}

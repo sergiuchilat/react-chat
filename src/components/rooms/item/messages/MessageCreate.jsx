@@ -5,7 +5,7 @@ import MessagesApi from '../../../../services/api/modules/MessagesApi';
 import { showSnackbar } from '../../../../store/SnackBarSlice';
 import { useDispatch } from 'react-redux';
 import { initialStates } from '../InitialStatesRoomItem';
-import { SetEmoji } from '../../../../utils/SetEmoji';
+import { SetEmoji } from '../../../../functions/SetEmoji';
 import { useRef } from 'react';
 import Tooltip from '../../../common/Tooltip';
 

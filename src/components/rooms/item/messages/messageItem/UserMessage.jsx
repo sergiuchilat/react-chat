@@ -4,8 +4,11 @@ import Moment from 'react-moment';
 import avatar from '../../../../../assets/img/icons/avatar.svg';
 import check from '../../../../../assets/img/icons/check.svg';
 import Tooltip from '../../../../common/Tooltip';
+import { setHighlightText } from '../../../../../functions/SetHighlightText';
+
 export default function UserMessage(
-  { isHover, handleDeleteMessage, handleUpdateMessage, createdAt, showAvatar, message, searchMessageActive, parentMessage }) {
+  { isHover, handleDeleteMessage, handleUpdateMessage, createdAt,
+    showAvatar, message, searchMessageActive, parentMessage, messageFilter }) {
   return (
     <div className={`messages-wrapper ${!isHover ? 'flex-end' : ''}`}>
       {(isHover && !searchMessageActive) && (
@@ -62,7 +65,7 @@ export default function UserMessage(
             {parentMessage?.text}
           </p>}
           <p>
-            {message?.text}
+            {setHighlightText(message.text, messageFilter)}
           </p>
         </div>
         {showAvatar && <img

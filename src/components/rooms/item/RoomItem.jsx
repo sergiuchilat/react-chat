@@ -13,10 +13,10 @@ import SnackBar from '../../dialogs/SnackBar';
 import { showSnackbar } from '../../../store/SnackBarSlice';
 import { setRead } from '../../../store/RoomsSlice';
 import { initialStates } from './InitialStatesRoomItem';
-import { scrollToBottom } from '../../../utils/ScrollToBottom';
-import { SetEmoji } from '../../../utils/SetEmoji';
+import { scrollToBottom } from '../../../functions/ScrollToBottom';
+import { SetEmoji } from '../../../functions/SetEmoji';
 
-export default function RoomItem({ userExternalUuid }) {
+export default function RoomItem({ isHeader, userExternalUuid }) {
   const [user, setUser] = useState(initialStates.user);
   const [room, setRoom] = useState(initialStates.room);
   const [messages, setMessages] = useState(initialStates.messages);
@@ -191,12 +191,13 @@ export default function RoomItem({ userExternalUuid }) {
   }, [roomUuid]);
 
   return (
-    <div className={`${room.name && 'rooms-item'} room`}>
+    <div className={`${room.name && 'rooms-item'} room ${isHeader ? 'with-header' : ''}`}>
       {!snackBar.showed && <>
         {room.name && (
           <>
             {!searchMessageActive && (
               <RoomName
+                isHeader={isHeader}
                 name={room.name}
                 handlerSearch={toggleSearchActive}
               />
@@ -207,9 +208,10 @@ export default function RoomItem({ userExternalUuid }) {
                 handleSearchInput={handleSearchInput}
                 handleSearch={handleSearch}
                 handleChangeDate={handleChangeDate}
+                isHeader={isHeader}
               />
             )}
-            {pending && <div style={{ textAlign: 'center' }}>pending...</div>}
+            {pending && <div className={'loading'}>pending...</div>}
             {!pending && (
               <MessagesList
                 ref={messagesList}
@@ -219,6 +221,7 @@ export default function RoomItem({ userExternalUuid }) {
                 handleUpdateMessage={handleFinishUpdatingMessage}
                 searchMessageActive={searchMessageActive}
                 handleReplyMessage={handleReplyMessage}
+                messageFilter={messageFilters.text}
               />
             )}
             {!searchMessageActive && <>

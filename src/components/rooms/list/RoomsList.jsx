@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchRooms } from '../../../store/RoomsSlice';
 import useDebounce from '../../../hooks/useDebounce';
 
-export default function RoomsList( { mode }) {
+export default function RoomsList( { mode, isHeader }) {
   const [searchString, setSearchString] = useState('');
   const rooms = useSelector(state => state.rooms.roomsList);
   const dispatch = useDispatch();
@@ -25,7 +25,7 @@ export default function RoomsList( { mode }) {
   };
 
   return (
-    <div className={'rooms-list-inner'}>
+    <div className={`rooms-list-inner ${isHeader ? 'with-header': ''}`}>
       <RoomSearch onSearch={onSearch} />
       <div className={'rooms-list'}>
         {rooms.length !== 0 &&

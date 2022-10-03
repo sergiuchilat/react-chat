@@ -7,6 +7,7 @@ import { useState } from 'react';
 import logo from './assets/img/logos/react-logo.png';
 function App() {
   const [chatMode, setChatMode] = useState(false);
+  const [color, setColor] = useState('#007aff');
   const [userExternalUuid, setUserExternalUuid] = useState('8445d2f8-34ce-11ed-a261-0242ac120002');
   const [membersUuid] = useState(['c54cf8e0-34cd-11ed-a261-0242ac120002',
     '8445d2f8-34ce-11ed-a261-0242ac120002']);
@@ -42,6 +43,9 @@ function App() {
   const changeUuid = (e) => {
     setUserExternalUuid(e.target.value);
   };
+  const resetColor = () => {
+    setColor('#007aff');
+  };
   return (
     <Provider store={store}>
       <div style={{ textAlign: 'center' }}>
@@ -55,21 +59,33 @@ function App() {
           className={'create-room'}
           onClick={() => createRoom(roomName,membersUuid)}
         >
-          Create room
+            Create room
         </button>
+        <div>
+          <input
+            type={'color'}
+            value={color}
+            onChange={(e) => setColor(e.target.value)}
+          />
+          <button onClick={() => resetColor()}>
+            Reset
+          </button>
+        </div>
       </div>
 
       {chatMode && <ChatWrapper
         logo={logo}
         title={'Header'}
+        toggleChangeMode={toggleChangeMode}
         userExternalUuid={userExternalUuid}
+        headerColor={color}
       />}
-      {!chatMode && <button
+      <button
         className={'chat-open'}
         onClick={toggleChangeMode}
       >
         Chat
-      </button>}
+      </button>
     </Provider>
   );
 }

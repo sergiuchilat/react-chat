@@ -5,10 +5,11 @@ export default function MessageSearch({
   handleCloseSearch,
   handleSearchInput,
   handleSearch,
-  handleChangeDate
+  handleChangeDate,
+  isHeader
 }) {
   return (
-    <div className={'message-search'}>
+    <div className={`message-search ${isHeader ? 'with-header': ''}`}>
       <div className={'message-search-inner'}>
         <img
           width={16}

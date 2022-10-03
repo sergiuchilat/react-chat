@@ -2,7 +2,7 @@ import MessageItem from './messageItem/MessageItem';
 import { forwardRef } from 'react';
 
 export const MessagesList = forwardRef(
-  ({ userUuid, messages, handleDeleteMessage, handleUpdateMessage, searchMessageActive, handleReplyMessage },
+  ({ userUuid, messages, handleDeleteMessage, handleUpdateMessage, searchMessageActive, handleReplyMessage, messageFilter },
     ref) => {
     return (
       <div
@@ -21,6 +21,7 @@ export const MessagesList = forwardRef(
                 key={message.uuid}
                 messages={messages}
                 handleReplyMessage={handleReplyMessage}
+                messageFilter={messageFilter}
               />
             ))}
           {messages.length === 0 && (

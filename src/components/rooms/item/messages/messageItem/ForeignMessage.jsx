@@ -5,7 +5,8 @@ import forward from '../../../../../assets/img/icons/forward.svg';
 import { useDispatch } from 'react-redux';
 import { showAlert } from '../../../../../store/AlertDialogSlice';
 import Tooltip from '../../../../common/Tooltip';
-export default function ForeignMessage({ isHover, showAvatar, message, createdAt, handleReplyMessage, parentMessage }) {
+import { setHighlightText } from '../../../../../functions/SetHighlightText';
+export default function ForeignMessage({ isHover, showAvatar, message, createdAt, handleReplyMessage, parentMessage, messageFilter }) {
   const dispatch = useDispatch();
 
   const handleForwardMessage = (message) => {
@@ -32,7 +33,7 @@ export default function ForeignMessage({ isHover, showAvatar, message, createdAt
             {parentMessage?.text}
           </p>}
           <p>
-            {message?.text}
+            {setHighlightText(message.text, messageFilter)}
           </p>
           <Moment
             format={'HH:mm'}

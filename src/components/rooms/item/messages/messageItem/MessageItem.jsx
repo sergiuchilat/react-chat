@@ -3,14 +3,8 @@ import UserMessage from './UserMessage';
 import ForeignMessage from './ForeignMessage';
 
 export default function MessageItemWrapper({
-  userUuid,
-  message,
-  handleDeleteMessage,
-  handleUpdateMessage,
-  searchMessageActive,
-  messages,
-  handleReplyMessage
-}) {
+  userUuid, message, handleDeleteMessage, handleUpdateMessage, searchMessageActive,
+  messages, handleReplyMessage, messageFilter }) {
   const [isHover, setIsHover] = useState(false);
   const messageItem = useRef();
   const [showAvatar, setShowAvatar] = useState(false);
@@ -20,13 +14,12 @@ export default function MessageItemWrapper({
       setIsHover(true);
     }
   };
-  const createdAt = new Date(Number(`${message.created_at}000`));
   const handleMouseLeave = () => {
     if(!searchMessageActive){
       setIsHover(false);
     }
   };
-
+  const createdAt = new Date(Number(`${message.created_at}000`));
   const setAvatar = () => {
     if(messageItem.current){
       if(messageItem.current.nextSibling){
@@ -61,6 +54,7 @@ export default function MessageItemWrapper({
           createdAt={createdAt}
           handleReplyMessage={handleReplyMessage}
           parentMessage={parentMessage}
+          messageFilter={messageFilter}
         />
       )}
       {message.sender_uuid === userUuid && (
@@ -73,6 +67,7 @@ export default function MessageItemWrapper({
           message={message}
           searchMessageActive={searchMessageActive}
           parentMessage={parentMessage}
+          messageFilter={messageFilter}
         />
       )}
     </div>

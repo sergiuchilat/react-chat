@@ -19,7 +19,7 @@ export const MessageEdit = forwardRef(
       }
     };
     const validMessageInput = (text) =>  text.length;
-    const handleUpdateMessage = async (messageUuid, parentUuid) => {
+    const handleUpdateMessage = async (messageUuid, /*parentUuid*/) => {
       try {
         if (validMessageInput(updatingMessage.text)) {
           if(!updatingMessage.parent_uuid){
