@@ -1,4 +1,4 @@
-export const scrollToBottom = (el, timeout = 400) => {
+export const scrollToBottom = (el, timeout = 500) => {
   setTimeout(() => {
     if (el.current) {
       el.current.scroll({

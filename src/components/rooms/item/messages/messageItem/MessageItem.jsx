@@ -9,6 +9,7 @@ export default function MessageItemWrapper({
   const messageItem = useRef();
   const [showAvatar, setShowAvatar] = useState(false);
   const [parentMessage, setParentMessage] = useState({});
+
   const handleMouseEnter = () => {
     if(!searchMessageActive){
       setIsHover(true);
@@ -36,6 +37,7 @@ export default function MessageItemWrapper({
   };
   useEffect(() => {
     setShowAvatar(setAvatar());
+
     findParentMessage();
   }, [messages]);
 
@@ -43,8 +45,9 @@ export default function MessageItemWrapper({
     <div
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
-      className={`${message.sender_uuid !== userUuid ? 'foreign-message' : 'my-message'} ${!showAvatar ? 'without-avatar' : ''}`}
+      className={`${message.sender_uuid !== userUuid ? 'foreign-message' : 'my-message'} ${!showAvatar ? 'without-avatar' : ''} ${!message.is_read ? 'unread' : ''}`}
       ref={messageItem}
+      data-id={message.uuid}
     >
       {message.sender_uuid !== userUuid && (
         <ForeignMessage

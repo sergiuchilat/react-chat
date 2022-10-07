@@ -4,15 +4,15 @@ import Tooltip from '../../../common/Tooltip';
 export default function MessageSearchActions({
   handleCloseSearch,
   handleSearch,
-  handleChangeDate
+  handleSearchInput
 }) {
   const [startDate, setStartDate] = useState(null);
   const setDate = (date) => {
     if(date) {
       const finishDate = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
-      handleChangeDate(finishDate);
+      handleSearchInput('date',finishDate);
     } else {
-      handleChangeDate('');
+      handleSearchInput('date','');
     }
     setStartDate(date);
   };

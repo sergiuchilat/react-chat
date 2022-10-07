@@ -64,9 +64,9 @@ export default function UserMessage(
           {message.parent_uuid && <p className={'reply-text'}>
             {parentMessage?.text}
           </p>}
-          <p>
+          {message.text?.length > 0 && <p>
             {setHighlightText(message.text, messageFilter)}
-          </p>
+          </p>}
         </div>
         {showAvatar && <img
           height={25}

@@ -3,7 +3,7 @@ import { forwardRef, useEffect } from 'react';
 import cancel from '../../../../assets/img/icons/cancel.svg';
 import { useState } from 'react';
 import MessagesApi from '../../../../services/api/modules/MessagesApi';
-import { showSnackbar } from '../../../../store/SnackBarSlice';
+import { showSnackbar } from '../../../../store/modules/SnackBarSlice';
 import { useDispatch } from 'react-redux';
 import Tooltip from '../../../common/Tooltip';
 export const MessageEdit = forwardRef(
@@ -19,15 +19,15 @@ export const MessageEdit = forwardRef(
       }
     };
     const validMessageInput = (text) =>  text.length;
-    const handleUpdateMessage = async (messageUuid, /*parentUuid*/) => {
+    const handleUpdateMessage = async (messageUuid, parentUuid) => {
       try {
         if (validMessageInput(updatingMessage.text)) {
           if(!updatingMessage.parent_uuid){
             delete updatingMessage.parent_uuid;
           }
-          // if(!Object.keys(parentUuid).length){
-          //   updatingMessage.parent_uuid = null;
-          // }
+          if(!Object.keys(parentUuid).length){
+            updatingMessage.parent_uuid = null;
+          }
           const response = await new MessagesApi().updateMessage(messageUuid, { ...updatingMessage });
           if (response.data) {
             updateMessage();

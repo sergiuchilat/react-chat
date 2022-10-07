@@ -1,17 +1,17 @@
 import './assets/styles/App.css';
 import ChatWrapper from './components/ChatWrapper';
 import RoomsApi from './services/api/modules/RoomsApi';
-import { Provider } from 'react-redux';
-import { store } from './store';
+import { useSelector, useDispatch } from 'react-redux';
 import { useState } from 'react';
 import logo from './assets/img/logos/react-logo.png';
+import { changeUserExternalUuid } from './store/modules/UserSlice';
 function App() {
   const [chatMode, setChatMode] = useState(false);
   const [color, setColor] = useState('#007aff');
-  const [userExternalUuid, setUserExternalUuid] = useState('8445d2f8-34ce-11ed-a261-0242ac120002');
-  const [membersUuid] = useState(['c54cf8e0-34cd-11ed-a261-0242ac120002',
-    '8445d2f8-34ce-11ed-a261-0242ac120002']);
+  const userExternalUuid = useSelector(state => state.user.userExternalUuid);
+  const membersUuid = ['c54cf8e0-34cd-11ed-a261-0242ac120002', '8445d2f8-34ce-11ed-a261-0242ac120002'];
   const roomName = `room-${Math.trunc(Math.random() * 10)}`;
+  const dispatch = useDispatch();
   const createRoom = async (roomName, membersUuid) => {
     try {
       const response = await new RoomsApi().create({
@@ -41,13 +41,13 @@ function App() {
     setChatMode(chatMode => !chatMode);
   };
   const changeUuid = (e) => {
-    setUserExternalUuid(e.target.value);
+    dispatch(changeUserExternalUuid(e.target.value));
   };
   const resetColor = () => {
     setColor('#007aff');
   };
   return (
-    <Provider store={store}>
+    <>
       <div style={{ textAlign: 'center' }}>
         <strong>Super chat APP</strong>
         <div>User external Uuid</div>
@@ -55,6 +55,7 @@ function App() {
           value={userExternalUuid}
           onChange={(e) => changeUuid(e)}
         />
+        c54cf8e0-34cd-11ed-a261-0242ac120002
         <button
           className={'create-room'}
           onClick={() => createRoom(roomName,membersUuid)}
@@ -68,7 +69,7 @@ function App() {
             onChange={(e) => setColor(e.target.value)}
           />
           <button onClick={() => resetColor()}>
-            Reset
+              Reset
           </button>
         </div>
       </div>
@@ -84,9 +85,9 @@ function App() {
         className={'chat-open'}
         onClick={toggleChangeMode}
       >
-        Chat
+          Chat
       </button>
-    </Provider>
+    </>
   );
 }
 

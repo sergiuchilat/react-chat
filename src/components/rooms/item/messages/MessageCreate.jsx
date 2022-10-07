@@ -2,7 +2,7 @@ import MessageActions from './MessageActions';
 import cancel from '../../../../assets/img/icons/cancel.svg';
 import { useState } from 'react';
 import MessagesApi from '../../../../services/api/modules/MessagesApi';
-import { showSnackbar } from '../../../../store/SnackBarSlice';
+import { showSnackbar } from '../../../../store/modules/SnackBarSlice';
 import { useDispatch } from 'react-redux';
 import { initialStates } from '../InitialStatesRoomItem';
 import { SetEmoji } from '../../../../functions/SetEmoji';

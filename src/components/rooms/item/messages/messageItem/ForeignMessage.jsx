@@ -3,17 +3,20 @@ import Moment from 'react-moment';
 import reply from '../../../../../assets/img/icons/reply.svg';
 import forward from '../../../../../assets/img/icons/forward.svg';
 import { useDispatch } from 'react-redux';
-import { showAlert } from '../../../../../store/AlertDialogSlice';
+import { showAlert } from '../../../../../store/modules/AlertDialogSlice';
 import Tooltip from '../../../../common/Tooltip';
 import { setHighlightText } from '../../../../../functions/SetHighlightText';
-export default function ForeignMessage({ isHover, showAvatar, message, createdAt, handleReplyMessage, parentMessage, messageFilter }) {
+import { selectForwardMessage } from '../../../../../store/modules/RoomsSlice';
+
+export default function ForeignMessage({ isHover, showAvatar, message, createdAt,
+  handleReplyMessage, parentMessage, messageFilter }) {
   const dispatch = useDispatch();
 
   const handleForwardMessage = (message) => {
-    console.log(message);
     const dialog = {
       title: 'Forward a message'
     };
+    dispatch(selectForwardMessage(message.uuid));
     dispatch(showAlert({ ...dialog }));
   };
 
@@ -32,9 +35,9 @@ export default function ForeignMessage({ isHover, showAvatar, message, createdAt
           {message.parent_uuid && <p className={'reply-text'}>
             {parentMessage?.text}
           </p>}
-          <p>
+          {message.text?.length > 0 && <p>
             {setHighlightText(message.text, messageFilter)}
-          </p>
+          </p>}
           <Moment
             format={'HH:mm'}
             className={'message-date'}

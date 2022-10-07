@@ -7,14 +7,15 @@ import RoomsApi from '../../../services/api/modules/RoomsApi';
 import MessagesApi from '../../../services/api/modules/MessagesApi';
 import { MessageEdit } from './messages/MessageEdit';
 import { useSelector, useDispatch } from 'react-redux';
-import { showAlert } from '../../../store/AlertDialogSlice';
+import { showAlert } from '../../../store/modules/AlertDialogSlice';
 import AlertDialog from '../../dialogs/AlertDialog';
 import SnackBar from '../../dialogs/SnackBar';
-import { showSnackbar } from '../../../store/SnackBarSlice';
-import { setRead } from '../../../store/RoomsSlice';
+import { showSnackbar } from '../../../store/modules/SnackBarSlice';
+import { setRead } from '../../../store/modules/RoomsSlice';
 import { initialStates } from './InitialStatesRoomItem';
 import { scrollToBottom } from '../../../functions/ScrollToBottom';
 import { SetEmoji } from '../../../functions/SetEmoji';
+import { changeUserUuid } from '../../../store/modules/UserSlice';
 
 export default function RoomItem({ isHeader, userExternalUuid }) {
   const [user, setUser] = useState(initialStates.user);
@@ -26,8 +27,9 @@ export default function RoomItem({ isHeader, userExternalUuid }) {
   const [replyMessage, setReplyMessage] = useState(initialStates.replyMessage);
   const [searchMessageActive, setSearchMessageActive] = useState(initialStates.searchMessageActive);
   const [pending, setPending] = useState(initialStates.pending);
-  const messagesList = useRef();
-  const editInput = useRef();
+  const messagesList = useRef(null);
+  const editInput = useRef(null);
+  const roomTitle = useRef(null);
   const roomUuid = useSelector(state => state.rooms.selectedRoom);
   const alert = useSelector((state) => state.alert);
   const snackBar = useSelector((state) => state.snackBar);
@@ -53,34 +55,15 @@ export default function RoomItem({ isHeader, userExternalUuid }) {
         if (members) {
           const member = members.find((item) => item.external_user_uuid === userExternalUuid);
           setUser(member);
+          dispatch(changeUserUuid(member.uuid));
         }
       }
     } catch (e) {
       dispatch(showSnackbar({ message: e.message }));
     } finally {
       setPending(false);
-      scrollToBottom(messagesList);
     }
   };
-  const readMessages = async (roomUuid, userUuid, externalUuid, messagesUuid) => {
-    try {
-      await new RoomsApi().memberReadMessages(roomUuid, userUuid, {
-        external_user_uuid: externalUuid,
-        messages: [...messagesUuid]
-      });
-    } catch (e) {
-      dispatch(showSnackbar(e));
-    }
-  };
-  useEffect(() => {
-    if(roomUuid){
-      const unreadMessagesUuid = messages.filter(message =>
-        (message.sender_uuid !== user.uuid) && !message.is_read).map(message => message.uuid);
-      if(unreadMessagesUuid.length){
-        readMessages(roomUuid, user.uuid, user.external_user_uuid, unreadMessagesUuid);
-      }
-    }
-  }, [user]);
   const fetchRoom = async (roomUuid) => {
     try {
       const response = await new RoomsApi().getItem(roomUuid);
@@ -108,16 +91,13 @@ export default function RoomItem({ isHeader, userExternalUuid }) {
     setReplyMessage({});
     if(searchMessageActive) {
       const filter = { ...initialStates.messageFilters };
-      setMessageFilters({ ...filter });
-      await fetchRoomMessages({ ...filter });
+      setMessageFilters(filter);
+      await fetchRoomMessages(filter);
       await scrollToBottom(messagesList);
     }
   };
-  const handleSearchInput = (value) => {
-    setMessageFilters({ ...messageFilters, text: value });
-  };
-  const handleChangeDate = (date) => {
-    setMessageFilters({ ...messageFilters, date: date });
+  const handleSearchInput = ( key, value) => {
+    setMessageFilters({ ...messageFilters, [key]: value });
   };
   const handleSearch = async () => {
     if(messageFilters.text.length || messageFilters.date.length) {
@@ -195,22 +175,24 @@ export default function RoomItem({ isHeader, userExternalUuid }) {
       {!snackBar.showed && <>
         {room.name && (
           <>
-            {!searchMessageActive && (
-              <RoomName
-                isHeader={isHeader}
-                name={room.name}
-                handlerSearch={toggleSearchActive}
-              />
-            )}
-            {searchMessageActive && (
-              <MessageSearch
-                handleCloseSearch={toggleSearchActive}
-                handleSearchInput={handleSearchInput}
-                handleSearch={handleSearch}
-                handleChangeDate={handleChangeDate}
-                isHeader={isHeader}
-              />
-            )}
+            <div ref={roomTitle}>
+              {!searchMessageActive && (
+                <RoomName
+                  isHeader={isHeader}
+                  name={room.name}
+                  handlerSearch={toggleSearchActive}
+                />
+              )}
+              {searchMessageActive && (
+                <MessageSearch
+                  handleCloseSearch={toggleSearchActive}
+                  handleSearchInput={handleSearchInput}
+                  handleSearch={handleSearch}
+                  isHeader={isHeader}
+                />
+              )}
+            </div>
+
             {pending && <div className={'loading'}>pending...</div>}
             {!pending && (
               <MessagesList
@@ -221,7 +203,8 @@ export default function RoomItem({ isHeader, userExternalUuid }) {
                 handleUpdateMessage={handleFinishUpdatingMessage}
                 searchMessageActive={searchMessageActive}
                 handleReplyMessage={handleReplyMessage}
-                messageFilter={messageFilters.text}
+                messageFilter={messageFilters}
+                roomTitle={roomTitle}
               />
             )}
             {!searchMessageActive && <>

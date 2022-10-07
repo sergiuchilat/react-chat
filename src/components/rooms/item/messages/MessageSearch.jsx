@@ -5,7 +5,6 @@ export default function MessageSearch({
   handleCloseSearch,
   handleSearchInput,
   handleSearch,
-  handleChangeDate,
   isHeader
 }) {
   return (
@@ -19,7 +18,7 @@ export default function MessageSearch({
           style={{ marginRight: 10 }}
         />
         <input
-          onChange={(e) => handleSearchInput(e.target.value)}
+          onChange={(e) => handleSearchInput('text', e.target.value)}
           onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
           placeholder={'Search Message'}
           className={'message-search-input'}
@@ -29,7 +28,7 @@ export default function MessageSearch({
       <MessageSearchActions
         handleCloseSearch={handleCloseSearch}
         handleSearch={handleSearch}
-        handleChangeDate={handleChangeDate}
+        handleSearchInput={handleSearchInput}
       />
     </div>
   );
