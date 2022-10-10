@@ -8,7 +8,6 @@ import { initialStates } from '../InitialStatesRoomItem';
 import { SetEmoji } from '../../../../functions/SetEmoji';
 import { useRef } from 'react';
 import Tooltip from '../../../common/Tooltip';
-
 export const MessageCreate = ({ resetMessages, updatingMessage,
   handleDeleteMessage, replyMessage, handleRemoveParentMessage, roomUuid, user }) => {
 
@@ -36,7 +35,7 @@ export const MessageCreate = ({ resetMessages, updatingMessage,
         if(!finalMessage.parent_uuid) {
           delete finalMessage.parent_uuid;
         }
-        const response = await new MessagesApi().createMessage({ ...finalMessage });
+        const response = await new MessagesApi().create({ ...finalMessage });
         if (response) {
           resetMessages();
         }

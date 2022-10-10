@@ -11,11 +11,10 @@ import { showAlert } from '../../../store/modules/AlertDialogSlice';
 import AlertDialog from '../../dialogs/AlertDialog';
 import SnackBar from '../../dialogs/SnackBar';
 import { showSnackbar } from '../../../store/modules/SnackBarSlice';
-import { setRead } from '../../../store/modules/RoomsSlice';
+import { setLastRoomMessage, setRead } from '../../../store/modules/RoomsSlice';
 import { initialStates } from './InitialStatesRoomItem';
 import { scrollToBottom } from '../../../functions/ScrollToBottom';
 import { SetEmoji } from '../../../functions/SetEmoji';
-import { changeUserUuid } from '../../../store/modules/UserSlice';
 
 export default function RoomItem({ isHeader, userExternalUuid }) {
   const [user, setUser] = useState(initialStates.user);
@@ -55,7 +54,6 @@ export default function RoomItem({ isHeader, userExternalUuid }) {
         if (members) {
           const member = members.find((item) => item.external_user_uuid === userExternalUuid);
           setUser(member);
-          dispatch(changeUserUuid(member.uuid));
         }
       }
     } catch (e) {
@@ -117,7 +115,7 @@ export default function RoomItem({ isHeader, userExternalUuid }) {
   };
   const handleDeleteMessage = async (messageUuid) => {
     try {
-      const response = await new MessagesApi().deleteMessage(messageUuid);
+      const response = await new MessagesApi().deleteItem(messageUuid);
       if (response.status === 204) {
         await fetchRoomMessages(messageFilters);
       }
@@ -159,6 +157,7 @@ export default function RoomItem({ isHeader, userExternalUuid }) {
   const resetMessages = async () => {
     scrollToBottom(messagesList);
     await fetchRoomMessages(messageFilters);
+    dispatch(setLastRoomMessage(messages[messages.length - 1].text));
     setReplyMessage({});
     setUpdatingMessage({});
   };

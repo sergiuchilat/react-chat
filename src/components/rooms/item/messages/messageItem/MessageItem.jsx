@@ -1,6 +1,9 @@
 import { useState, useRef, useEffect } from 'react';
 import UserMessage from './UserMessage';
 import ForeignMessage from './ForeignMessage';
+import { useDispatch } from 'react-redux';
+import { showSnackbar } from '../../../../../store/modules/SnackBarSlice';
+import MessagesApi from '../../../../../services/api/modules/MessagesApi';
 
 export default function MessageItemWrapper({
   userUuid, message, handleDeleteMessage, handleUpdateMessage, searchMessageActive,
@@ -9,7 +12,7 @@ export default function MessageItemWrapper({
   const messageItem = useRef();
   const [showAvatar, setShowAvatar] = useState(false);
   const [parentMessage, setParentMessage] = useState({});
-
+  const dispatch = useDispatch();
   const handleMouseEnter = () => {
     if(!searchMessageActive){
       setIsHover(true);
@@ -30,14 +33,29 @@ export default function MessageItemWrapper({
       }
     }
   };
-  const findParentMessage = () => {
+  const fetchMessage = async (uuid) => {
+    try {
+      const response = await new MessagesApi().getItem(uuid);
+      if(response.data.sender_uuid){
+        return response.data;
+      }
+    } catch (e) {
+      dispatch(showSnackbar({ message: e.message }));
+    }
+  };
+  const findParentMessage = async () => {
     if(message.parent_uuid) {
-      setParentMessage(messages.find(item => item.uuid === message.parent_uuid));
+      const parentMessage = messages.find(item => item.uuid === message.parent_uuid);
+      if(parentMessage) {
+        setParentMessage(parentMessage);
+      } else {
+        const response = await fetchMessage(message.parent_uuid);
+        setParentMessage(response);
+      }
     }
   };
   useEffect(() => {
     setShowAvatar(setAvatar());
-
     findParentMessage();
   }, [messages]);
 

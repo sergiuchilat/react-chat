@@ -34,6 +34,10 @@ export const RoomsSlice = createSlice({
     },
     selectForwardMessage: (state, { payload }) => {
       state.selectedMessageUuid = payload;
+    },
+    setLastRoomMessage: (state, { payload }) => {
+      const selectedRoom = state.roomsList.findIndex(room => room.uuid === state.selectedRoom);
+      state.roomsList[selectedRoom].last_message = payload;
     }
   },
   extraReducers: {
@@ -52,5 +56,5 @@ export const RoomsSlice = createSlice({
   }
 });
 
-export const { selectRoom, setRead, selectForwardMessage } = RoomsSlice.actions;
+export const { selectRoom, setRead, selectForwardMessage, setLastRoomMessage } = RoomsSlice.actions;
 export default RoomsSlice.reducer;

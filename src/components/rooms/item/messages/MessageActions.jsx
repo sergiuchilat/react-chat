@@ -13,6 +13,10 @@ export default function MessageActions({
   const onEmojiClick = (event, emojiObject) => {
     selectEmoji(emojiObject.emoji);
   };
+  const handleSubmit = () => {
+    setEmojiDialogVisible(emojiDialog => !emojiDialog);
+    handleSubmitMessage();
+  };
   return (
     <>
       <button
@@ -35,7 +39,7 @@ export default function MessageActions({
       )}
       <FileUploader />
       {Object.keys(updatingMessage).length === 0 && <button
-        onClick={() => handleSubmitMessage()}
+        onClick={() => handleSubmit()}
         className={'send-message'}
       >
         <img
@@ -72,7 +76,6 @@ export default function MessageActions({
               />
             </button>
           </Tooltip>
-
         )}
       </>}
     </>
