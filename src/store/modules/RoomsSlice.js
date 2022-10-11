@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import RoomsApi from '../services/api/modules/RoomsApi';
+import RoomsApi from '../../services/api/modules/RoomsApi';
 
 export const fetchRooms = createAsyncThunk(
   'rooms/fetchRooms',
@@ -14,15 +14,16 @@ export const fetchRooms = createAsyncThunk(
     }
   }
 );
-
+const initialState = {
+  roomsList: [],
+  status: null,
+  error: null,
+  selectedRoom: null,
+  selectedMessageUuid: null,
+};
 export const RoomsSlice = createSlice({
   name: 'rooms',
-  initialState: {
-    roomsList: [],
-    status: null,
-    error: null,
-    selectedRoom: null,
-  },
+  initialState,
   reducers: {
     selectRoom: (state,{ payload }) => {
       state.selectedRoom = payload;
@@ -30,6 +31,13 @@ export const RoomsSlice = createSlice({
     setRead: (state, { payload }) => {
       const room = state.roomsList.find(item => item.uuid === payload);
       room.unread_messages = null;
+    },
+    selectForwardMessage: (state, { payload }) => {
+      state.selectedMessageUuid = payload;
+    },
+    setLastRoomMessage: (state, { payload }) => {
+      const selectedRoom = state.roomsList.findIndex(room => room.uuid === state.selectedRoom);
+      state.roomsList[selectedRoom].last_message = payload;
     }
   },
   extraReducers: {
@@ -48,5 +56,5 @@ export const RoomsSlice = createSlice({
   }
 });
 
-export const { selectRoom, setRead } = RoomsSlice.actions;
+export const { selectRoom, setRead, selectForwardMessage, setLastRoomMessage } = RoomsSlice.actions;
 export default RoomsSlice.reducer;

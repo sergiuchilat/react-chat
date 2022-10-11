@@ -5,10 +5,10 @@ export default function MessageSearch({
   handleCloseSearch,
   handleSearchInput,
   handleSearch,
-  handleChangeDate
+  isHeader
 }) {
   return (
-    <div className={'message-search'}>
+    <div className={`message-search ${isHeader ? 'with-header': ''}`}>
       <div className={'message-search-inner'}>
         <img
           width={16}
@@ -18,7 +18,8 @@ export default function MessageSearch({
           style={{ marginRight: 10 }}
         />
         <input
-          onChange={(e) => handleSearchInput(e.target.value)}
+          onChange={(e) => handleSearchInput('text', e.target.value)}
+          onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
           placeholder={'Search Message'}
           className={'message-search-input'}
           type={'text'}
@@ -27,7 +28,7 @@ export default function MessageSearch({
       <MessageSearchActions
         handleCloseSearch={handleCloseSearch}
         handleSearch={handleSearch}
-        handleChangeDate={handleChangeDate}
+        handleSearchInput={handleSearchInput}
       />
     </div>
   );

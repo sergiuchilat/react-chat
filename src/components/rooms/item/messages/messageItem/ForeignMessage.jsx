@@ -3,15 +3,20 @@ import Moment from 'react-moment';
 import reply from '../../../../../assets/img/icons/reply.svg';
 import forward from '../../../../../assets/img/icons/forward.svg';
 import { useDispatch } from 'react-redux';
-import { showAlert } from '../../../../../store/AlertDialogSlice';
-export default function ForeignMessage({ isHover, showAvatar, message, createdAt, handleReplyMessage, parentMessage }) {
+import { showAlert } from '../../../../../store/modules/AlertDialogSlice';
+import Tooltip from '../../../../common/Tooltip';
+import { setHighlightText } from '../../../../../functions/SetHighlightText';
+import { selectForwardMessage } from '../../../../../store/modules/RoomsSlice';
+
+export default function ForeignMessage({ isHover, showAvatar, message, createdAt,
+  handleReplyMessage, parentMessage, messageFilter }) {
   const dispatch = useDispatch();
 
   const handleForwardMessage = (message) => {
-    console.log(message);
     const dialog = {
       title: 'Forward a message'
     };
+    dispatch(selectForwardMessage(message.uuid));
     dispatch(showAlert({ ...dialog }));
   };
 
@@ -28,11 +33,11 @@ export default function ForeignMessage({ isHover, showAvatar, message, createdAt
         />}
         <div className={'message-item'}>
           {message.parent_uuid && <p className={'reply-text'}>
-            {parentMessage.text}
+            {parentMessage?.text}
           </p>}
-          <p>
-            {message.text}
-          </p>
+          {message.text?.length > 0 && <p>
+            {setHighlightText(message.text, messageFilter)}
+          </p>}
           <Moment
             format={'HH:mm'}
             className={'message-date'}
@@ -43,20 +48,24 @@ export default function ForeignMessage({ isHover, showAvatar, message, createdAt
       </div>
       {isHover && (
         <div className={'messages-item-actions'}>
-          <button onClick={() => handleReplyMessage(message)}>
-            <img
-              width={16}
-              src={reply}
-              alt={'reply'}
-            />
-          </button>
-          <button onClick={() => handleForwardMessage(message)}>
-            <img
-              width={16}
-              src={forward}
-              alt={'forward'}
-            />
-          </button>
+          <Tooltip title={'Reply'}>
+            <button onClick={() => handleReplyMessage(message)}>
+              <img
+                width={16}
+                src={reply}
+                alt={'reply'}
+              />
+            </button>
+          </Tooltip>
+          <Tooltip title={'Forward'}>
+            <button onClick={() => handleForwardMessage(message)}>
+              <img
+                width={16}
+                src={forward}
+                alt={'forward'}
+              />
+            </button>
+          </Tooltip>
         </div>
       )}
     </div>

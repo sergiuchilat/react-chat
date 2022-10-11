@@ -23,6 +23,7 @@ export default function FileUploader() {
           alt={'attachment'}
         />
       </button>
+
       <input
         ref={fileInput}
         style={{ display: 'none' }}
